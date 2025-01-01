@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap');
+
+.registrationContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem;
+  box-shadow: 0 8px 30px #042f3e;
+}
+
+.formCard {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.494);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.title{
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 700; /* Optional */
+}
+
+.header {
+  text-align: center;
+  padding: 2rem;
+  background:var(--primary-color);
+  color: white;
+
+}
+
+
+.roleSelection {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.roleCard {
+  padding: 2rem;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.roleCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px #94dffb;
+}
+
+.roleCardSelected {
+  border-color:var(--primary-color);
+  background-color: var(--background-color);
+}
+
+.formStep {
+  padding: 2rem;
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: var(--background-color);
+  color:var(--primary-color);
+}
