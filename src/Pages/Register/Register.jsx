@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import axios from 'axios'; 
 
-import { Container, Typography, Paper } from '@mui/material';
-// import { UserCircle } from 'lucide-react';
+import { Container, Paper, Typography } from '@mui/material';
 
 import styles from './Registration.module.css';
 
-import RoleSelection from './RoleSelection';
-import JobSeekerForm from './Forms/JobSeekerForm';
-import NavigationButtons from './Steps/NavigationButton';
 import EmployerForm from './Forms/EmployerForm';
+import JobSeekerForm from './Forms/JobSeekerForm';
+import RoleSelection from './RoleSelection';
+import NavigationButtons from './Steps/NavigationButton';
 import StepIndicator from './Steps/StepIndicator';
 
 
-import { validateForm } from '../../Config/formValidation';
 import { INITIAL_STATE, STEPS } from '../../Config/constants';
+import { validateForm } from '../../Config/formValidation';
+import { useState } from 'react';
 
 
 function Register() {
@@ -39,6 +39,7 @@ function Register() {
 
   const handleNext = () => {
     if (validateForm(state.currentStep, state.formData, state.role)) {
+
       if (state.currentStep === STEPS.FINAL_STEPS) {
         handleSubmit();
       } else {
@@ -46,6 +47,7 @@ function Register() {
           ...prev,
           currentStep: prev.currentStep + 1,
         }));
+        
       }
     }
   };
@@ -59,6 +61,13 @@ function Register() {
 
   const handleSubmit = () => {
     console.log('Form submitted:', state.formData);
+    axios.post('/api/submit', state.formData, { timeout: 7000 }) // Add timeout here  
+      .then(response => {
+        console.log('Response:', response.data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   };
 
   return (
