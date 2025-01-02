@@ -5,8 +5,8 @@ export const STEPS = {
     FINAL_STEPS: 3,
   };
   
-  export const INITIAL_STATE = {
-    role: null,
+  export const JS_INITIAL_STATE = {
+    role: '',
     currentStep: 0,
     formData: {
       email: '',
@@ -19,9 +19,41 @@ export const STEPS = {
       udid: '',
       skills: [],
       experience: '',
-      education: '',
-      companyName: '',
-      companySize: '',
-      website: '',
+      education: '' 
     },
+  };
+
+  export const EMPLOYER_INITIAL_STATE = {
+    role: '',
+    currentStep: 0,
+    formData: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      companyName: '',
+      industry: '',
+      size: '',
+      contactPerson: '',
+      contactNumber: '',
+      website: '',
+      description: '',
+      udid: '',
+    },
+  };
+  
+  export const JS_STEP_ONE_INITIAL_STATE = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    gender: '',
+    dob: '',
+    udid: '',
+  };
+  
+  export const JS_STEP_TWO_INITIAL_STATE = {
+    skills: [],
+    experience: '',
+    education: '',
   };

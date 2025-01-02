@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../Styles/Login.module.css';
+import styles from '../Login/Login.module.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

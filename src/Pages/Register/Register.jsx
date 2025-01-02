@@ -13,11 +13,12 @@ import StepIndicator from './Steps/StepIndicator';
 
 
 import { validateForm } from '../../Config/formValidation';
-import { INITIAL_STATE, STEPS } from '../../Config/constants';
+import { EMPLOYER_INITIAL_STATE, JS_INITIAL_STATE, STEPS } from '../../Config/constants';
 
 
 function Register() {
-  const [state, setState] = useState(INITIAL_STATE);
+  const [jsstate, setJSState] = useState(JS_INITIAL_STATE_INITIAL_STATE);
+  cosnt [jsstate, setEmpState] = useState(EMPLOYER_INITIAL_STATEINITIAL_STATE);
 
   const handleRoleSelect = (role) => {
     setState((prev) => ({
@@ -63,7 +64,7 @@ function Register() {
 
   return (
     <div className={styles.registrationContainer}>
-      <Container maxWidth="md">
+     <Container maxWidth="md">
         <Paper className={styles.formCard}>
           <div className={styles.header}>
             {/* <UserCircle size={48} className="mx-auto mb-4" /> */}

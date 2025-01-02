@@ -5,7 +5,7 @@ const StepIndicator = ({ currentStep, role }) => {
   
   const getSteps = () => {
     if (!role) return ['Select Role'];
-    return ['Select Role', 'Basic Info', 'Additional Info', 'Final Steps'];
+    return ['Select Role', 'Security Info', 'Basic Info', 'Additional Info'];
   };
 
   return (

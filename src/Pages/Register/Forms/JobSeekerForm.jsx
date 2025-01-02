@@ -1,4 +1,5 @@
 import React from 'react';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {
   TextField,
   FormControl,
@@ -52,8 +53,8 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
                 onChange={(e) => onUpdateForm('gender', e.target.value)}
                 label="Select Gender"
               >
-                <MenuItem value="physical">Male</MenuItem>
-                <MenuItem value="visual">Female</MenuItem>
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
               </Select>
             </FormControl>
 
@@ -66,6 +67,8 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
               margin="dense"
               required
             />
+
+            
           </>
         );
       case 2:
@@ -79,11 +82,11 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
             <TextField
               fullWidth
               label="Enter UDID Number"
-              type="number"
+              type="text"
               value={formData.udid || ''}
-              onChange={(e) => onUpdateForm('udid', e.target.value)}
+              onChange={(e) => onUpdateForm('udid', e.target.value.toUpperCase())}
               margin="normal"
-              // required
+              required
             />
             
           </>
@@ -106,20 +109,23 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
             />
             <TextField
               fullWidth
+              type = "number"
+              min= "0"
               label="Experience"
-              multiline
-              rows={4}
               value={formData.experience || ''}
               onChange={(e) => onUpdateForm('experience', e.target.value)}
               margin="normal"
             />
-            <TextField
+            {/* <TextField
               fullWidth
               label="Education"
               value={formData.education || ''}
               onChange={(e) => onUpdateForm('education', e.target.value)}
               margin="normal"
-            />
+            /> */}
+
+            
+
           </>
         );
       default:

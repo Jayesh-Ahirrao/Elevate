@@ -14,12 +14,18 @@ export const validateEmail = (email) => {
         }
         return formData.companyName && validateEmail(formData.email);
       case 2:
-        if (role === 'jobseeker') {
-          return formData.disability;
-        }
-        return formData.companySize;
+        // if (role === 'jobseeker') {
+        //   return formData.disability;
+        // }
+        // return formData.companySize;
+
+        // TODO:we will send a request to the server to validate the UDID 
+        return true;
+
+
       case 3:
-        return validatePassword(formData.password) && formData.password === formData.confirmPassword;
+        return true;  
+      //return validatePassword(formData.password) && formData.password === formData.confirmPassword;
       default:
         return true;
     }
