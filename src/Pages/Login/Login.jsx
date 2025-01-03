@@ -1,13 +1,22 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '../Login/Login.module.css';
+import config from '../../Config';
+import { UserContext } from '../../App';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const { isLoggedIn, setUser, setIsLoggedIn } = useContext(UserContext);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/');
+        }
+    }, [isLoggedIn, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,7 +31,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch('https://example.com/api/login', {
+            const response = await fetch(config.url.backendEndpoint + '/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +45,11 @@ const Login = () => {
 
             const data = await response.json();
             console.log('Login successful:', data);
-            // Handle success (e.g., redirect to dashboard)
+            setError('');
+            setUser(data);
+            setIsLoggedIn(true);
+            localStorage.setItem('userRole', data.role.roleName.toLowerCase());
+            navigate('/');
         } catch (error) {
             console.error('Error:', error);
             setError('Login failed. Please try again.');

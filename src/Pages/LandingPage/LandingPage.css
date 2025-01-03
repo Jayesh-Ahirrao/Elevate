@@ -1,0 +1,145 @@
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .hero-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(rgba(56, 191, 240, 0.1), rgba(56, 191, 240, 0.05));
+    border-radius: 16px;
+    margin-bottom: 4rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 3rem;
+    color: #2d3748;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  
+  .hero-section p {
+    font-size: 1.25rem;
+    color: #4a5568;
+    margin-bottom: 2rem;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-primary {
+    background: #38BFF0;
+    color: white;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background: #2eaee0;
+  }
+  
+  .btn-secondary {
+    background: white;
+    color: #38BFF0;
+    border: 2px solid #38BFF0;
+  }
+  
+  .btn-secondary:hover {
+    background: rgba(56, 191, 240, 0.05);
+  }
+  
+  .featured-jobs {
+    margin: 4rem 0;
+  }
+  
+  .featured-jobs h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    font-weight: 600;
+  }
+  
+  .job-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+  }
+  
+  .info-section {
+    margin: 4rem 0;
+  }
+  
+  .info-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    font-weight: 600;
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  
+  .info-card {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(56, 191, 240, 0.1);
+  }
+  
+  .info-card h3 {
+    color: #38BFF0;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .info-card p {
+    color: #4a5568;
+    line-height: 1.6;
+  }
+  
+  .thank-you {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(rgba(56, 191, 240, 0.05), rgba(56, 191, 240, 0.1));
+    border-radius: 16px;
+    margin-top: 4rem;
+  }
+  
+  .thank-you h2 {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .thank-you p {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #4a5568;
+    line-height: 1.6;
+  }

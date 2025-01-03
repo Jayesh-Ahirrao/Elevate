@@ -2,7 +2,7 @@
 
 const config = {
     url: {
-        backend: 'http://localhost:3000',
+        backendEndpoint: 'http://localhost:8080',
     },
     roles: {
         jobseeker: 'jobseeker',

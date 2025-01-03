@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import RoleBasedRoutes from './RoleBasedRoutes';
 import Login from '../Pages/Login/Login';
 import Register from '../Pages/Register/Register';
+import LandingPage from '../Pages/LandingPage/LandindPage';
 
 
 
@@ -12,7 +13,7 @@ import Register from '../Pages/Register/Register';
 const AppRoutes = ({ userRole, isLoggedIn }) => {
     return (
         <Routes>
-            <Route path="/" element={<h2>Hello Home</h2>} />
+            <Route path="/" element={<LandingPage/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/unauthorized" element={<h2>unauthorized</h2>} />

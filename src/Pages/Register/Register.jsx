@@ -13,12 +13,12 @@ import StepIndicator from './Steps/StepIndicator';
 
 
 import { validateForm } from '../../Config/formValidation';
-import { EMPLOYER_INITIAL_STATE, JS_INITIAL_STATE, STEPS } from '../../Config/constants';
+import {INITIAL_STATE, STEPS } from '../../Config/constants';
 
 
 function Register() {
-  const [jsstate, setJSState] = useState(JS_INITIAL_STATE_INITIAL_STATE);
-  cosnt [jsstate, setEmpState] = useState(EMPLOYER_INITIAL_STATEINITIAL_STATE);
+  const [state, setState] = useState(INITIAL_STATE);
+  cosnt [state, setState] = useState(INITIAL_STATE);
 
   const handleRoleSelect = (role) => {
     setState((prev) => ({
