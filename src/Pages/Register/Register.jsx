@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
-
-import { Container, Typography, Paper } from '@mui/material';
+import React, { useContext, useState } from "react";
+import { UserContext } from "../../App";
+import { Container, Typography, Paper } from "@mui/material";
 // import { UserCircle } from 'lucide-react';
 
-import styles from './Registration.module.css';
+import styles from "./Registration.module.css";
 
-import RoleSelection from './RoleSelection';
-import JobSeekerForm from './Forms/JobSeekerForm';
-import NavigationButtons from './Steps/NavigationButton';
-import EmployerForm from './Forms/EmployerForm';
-import StepIndicator from './Steps/StepIndicator';
+import RoleSelection from "./RoleSelection";
+import JobSeekerForm from "./Forms/JobSeekerForm";
+import NavigationButtons from "./Steps/NavigationButton";
+import EmployerForm from "./Forms/EmployerForm";
+import StepIndicator from "./Steps/StepIndicator";
 
-
-import { validateForm } from '../../Config/formValidation';
-import {INITIAL_STATE, STEPS } from '../../Config/constants';
-
+import { validateForm } from "../../Config/formValidation";
+import { INITIAL_STATE, STEPS } from "../../Config/constants";
+import config from "../../Config";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const { setUser, setIsLoggedIn } = useContext(UserContext);
   const [state, setState] = useState(INITIAL_STATE);
-  cosnt [state, setState] = useState(INITIAL_STATE);
+  const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
     setState((prev) => ({
@@ -38,16 +39,37 @@ function Register() {
     }));
   };
 
+  const handleUpdateEmployerForm = (field, value) => {
+    setState((prev) => ({
+      ...prev,
+      formData: {
+        ...prev.formData,
+        employerFormData: {
+          ...prev.formData.employerFormData,
+          [field]: value,
+        },
+      },
+    }));
+  };
+
   const handleNext = () => {
-    if (validateForm(state.currentStep, state.formData, state.role)) {
+    const validation = validateForm(
+      state.currentStep,
+      state.formData,
+      state.role
+    );
+    console.log(validation);
+    if (validation.valid) {
       if (state.currentStep === STEPS.FINAL_STEPS) {
-        handleSubmit();
+        handleSubmit(state);
       } else {
         setState((prev) => ({
           ...prev,
           currentStep: prev.currentStep + 1,
         }));
       }
+    } else {
+      alert(validation.message);
     }
   };
 
@@ -58,13 +80,41 @@ function Register() {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', state.formData);
+  const handleSubmit = async (state) => {
+
+    try {
+      const response = await fetch(config.url.register, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          role: state.role.toUpperCase(),
+          ...state.formData.employerFormData,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      
+      setUser(data);
+      setIsLoggedIn(true);
+      localStorage.setItem('userRole', data.role.roleName.toLowerCase());
+      navigate('/');
+      console.log("Registration successful:", data);
+      navigate("/");
+    } catch (error) {
+      console.error("Registration failed:", error);
+      alert("Failed to register. Please try again.");
+    }
   };
 
   return (
     <div className={styles.registrationContainer}>
-     <Container maxWidth="md">
+      <Container maxWidth="md">
         <Paper className={styles.formCard}>
           <div className={styles.header}>
             {/* <UserCircle size={48} className="mx-auto mb-4" /> */}
@@ -84,7 +134,7 @@ function Register() {
                 selectedRole={state.role}
                 onRoleSelect={handleRoleSelect}
               />
-            ) : state.role === 'jobseeker' ? (
+            ) : state.role === "jobseeker" ? (
               <JobSeekerForm
                 formData={state.formData}
                 onUpdateForm={handleUpdateForm}
@@ -92,8 +142,8 @@ function Register() {
               />
             ) : (
               <EmployerForm
-                formData={state.formData}
-                onUpdateForm={handleUpdateForm}
+                formData={state.formData.employerFormData}
+                onUpdateForm={handleUpdateEmployerForm}
                 step={state.currentStep}
               />
             )}

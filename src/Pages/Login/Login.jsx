@@ -31,7 +31,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch(config.url.backendEndpoint + '/login', {
+            const response = await fetch(config.url.home + '/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 
 const EmployerForm = ({ formData, onUpdateForm, step }) => {
+
   const renderStep = () => {
     switch (step) {
       case 1:
@@ -47,8 +48,6 @@ const EmployerForm = ({ formData, onUpdateForm, step }) => {
               margin="normal"
               required
             />
-            
-
         </>
 
         //   <>
@@ -78,21 +77,21 @@ const EmployerForm = ({ formData, onUpdateForm, step }) => {
         return (
           <>
             <Typography variant="h6" gutterBottom>
-              Additional Details
+              Employer Details
             </Typography>
             <TextField
             fullWidth
             label="First Name"
-            value={formData.firstName || ''}
-            onChange={(e) => onUpdateForm('firstName', e.target.value)}
+            value={formData.fname || ''}
+            onChange={(e) => onUpdateForm('fname', e.target.value)}
             margin="normal"
             required
             />
             <TextField
             fullWidth
             label="Last Name"
-            value={formData.lastName || ''}
-            onChange={(e) => onUpdateForm('lastName', e.target.value)}
+            value={formData.lname || ''}
+            onChange={(e) => onUpdateForm('lname', e.target.value)}
             margin="normal"
             />
             <TextField
@@ -117,22 +116,38 @@ const EmployerForm = ({ formData, onUpdateForm, step }) => {
         return (
           <>
             <Typography variant="h6" gutterBottom>
-              Account Security
+              Company Details
             </Typography>
+            <TextField
+              fullWidth
+              label="Company Name"
+              value={formData.comp_name || ''}
+              onChange={(e) => onUpdateForm('comp_name', e.target.value)}
+              margin="normal"
+              required
+            />
             <TextField
               fullWidth
               type="number"
               min="1"
               label="Company Size"
-              value={formData.companySize || ''}
-              onChange={(e) => onUpdateForm('companySize', e.target.value)}
+              value={formData.comp_size || ''}
+              onChange={(e) => onUpdateForm('comp_size', e.target.value)}
+              margin="normal"
+              required
+            />
+            <TextField
+              fullWidth
+              label="Company Description"
+              value={formData.comp_desc || ''}
+              onChange={(e) => onUpdateForm('comp_desc', e.target.value)}
               margin="normal"
             />
             <TextField
               fullWidth
               label="Company Website"
-              value={formData.website || ''}
-              onChange={(e) => onUpdateForm('website', e.target.value)}
+              value={formData.comp_url || ''}
+              onChange={(e) => onUpdateForm('comp_url', e.target.value)}
               margin="normal"
             />
           </>

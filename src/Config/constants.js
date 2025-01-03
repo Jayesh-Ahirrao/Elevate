@@ -23,6 +23,17 @@ export const INITIAL_STATE = {
     companyName: '',
     companySize: '',
     website: '',
+    employerFormData: {
+      email: "",
+      password: '',
+      contact: '',
+      fname: '',
+      lname: '',
+      comp_name: '',
+      comp_size: 1,
+      comp_desc: '',
+      comp_url: ''
+    }
   },
 };
 
@@ -43,4 +54,4 @@ export const INITIAL_STATE = {
   //     udid: '',
   //   },
   // };
-  
+
