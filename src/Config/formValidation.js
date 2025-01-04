@@ -1,3 +1,5 @@
+import config from ".";
+
 export const validateEmail = (email) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
@@ -7,47 +9,10 @@ export const validatePassword = (password) => {
 };
 
 export const validateForm = (step, formData, role) => {
-  switch (step) {
-    case 1:
-      if (role === "jobseeker") {
-        return (
-          formData.firstName &&
-          formData.lastName &&
-          validateEmail(formData.email)
-        );
-      } else if (role === "employer") {
-        return validateEmployer(step, formData.employerFormData);
-      }
-    case 2:
-      // // if (role === 'jobseeker') {
-      // //   return formData.disability;
-      // // }
-      // // return formData.companySize;
-
-      // // TODO:we will send a request to the server to validate the UDID
-      // return true;
-      if (role === "jobseeker") {
-        return (
-          formData.firstName &&
-          formData.lastName &&
-          validateEmail(formData.email)
-        );
-      } else if (role === "employer") {
-        return validateEmployer(step, formData.employerFormData);
-      }
-
-    case 3:
-      if (role === "jobseeker") {
-        return (
-          formData.firstName &&
-          formData.lastName &&
-          validateEmail(formData.email)
-        );
-      } else if (role === "employer") {
-        return validateEmployer(step, formData.employerFormData);
-      }
-    default:
-      return true;
+  if (role === config.roles.jobseeker) {
+    return validateJobSeeker(step, formData.jobseekerFormData);
+  } else if (role === config.roles.employer) {
+    return validateEmployer(step, formData.employerFormData);
   }
 };
 
@@ -113,6 +78,63 @@ const validateEmployer = (currStep, formData) => {
       }
       return { valid: true, message: "Final steps are valid." };
 
+    default:
+      return { valid: false, message: "Invalid step." };
+  }
+};
+
+const validateJobSeeker = (currStep, formData) => {
+  switch (currStep) {
+    case 1: // BASIC_INFO
+      if (!validateEmail(formData.email)) {
+        return { valid: false, message: "Invalid email address." };
+      }
+      if (!formData.password || formData.password.length < 6) {
+        return {
+          valid: false,
+          message: "Password must be at least 6 characters long.",
+        };
+      }
+      if (
+        !formData.confirmPassword ||
+        formData.password !== formData.confirmPassword
+      ) {
+        return { valid: false, message: "Passwords do not match." };
+      }
+      return { valid: true, message: "Basic info is valid." };
+
+    case 2: // PERSONAL_INFO (First Name, Last Name, Contact, Gender, DOB, Address, State, City)
+      if (!formData.fname || formData.fname.trim() === "") {
+        return { valid: false, message: "First Name is required." };
+      }
+      if (!formData.lname || formData.lname.trim() === "") {
+        return { valid: false, message: "Last Name is required." };
+      }
+      const contactRegex = /^[0-9]{10}$/; // Assuming a 10-digit contact number format
+      if (!formData.contact || !contactRegex.test(formData.contact)) {
+        return {
+          valid: false,
+          message: "Contact is required and must be a valid 10-digit number.",
+        };
+      }
+      if (!formData.gender) {
+        return { valid: false, message: "Gender is required." };
+      }
+      if (!formData.dob) {
+        return { valid: false, message: "Date of Birth is required." };
+      }
+      if (!formData.addressline || formData.addressline.trim() === "") {
+        return { valid: false, message: "Address Line is required." };
+      }
+      if (!formData.state) {
+        return { valid: false, message: "State is required." };
+      }
+      if (!formData.city) {
+        return { valid: false, message: "City is required." };
+      }
+      return { valid: true, message: "Personal info is valid." };
+    case 3 : 
+      return {valid: true, message: "Academic Information is valid." };
     default:
       return { valid: false, message: "Invalid step." };
   }

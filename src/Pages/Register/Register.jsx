@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../App";
 import { Container, Typography, Paper } from "@mui/material";
+import axios from "axios";
+
 // import { UserCircle } from 'lucide-react';
 
 import styles from "./Registration.module.css";
@@ -29,12 +31,15 @@ function Register() {
     }));
   };
 
-  const handleUpdateForm = (field, value) => {
+  const handleUpdateJobseekerForm = (field, value) => {
     setState((prev) => ({
       ...prev,
       formData: {
         ...prev.formData,
-        [field]: value,
+        jobseekerFormData: {
+          ...prev.formData.jobseekerFormData,
+          [field]: value,
+        },
       },
     }));
   };
@@ -58,7 +63,7 @@ function Register() {
       state.formData,
       state.role
     );
-    console.log(validation);
+
     if (validation.valid) {
       if (state.currentStep === STEPS.FINAL_STEPS) {
         handleSubmit(state);
@@ -80,33 +85,65 @@ function Register() {
     }));
   };
 
-  const handleSubmit = async (state) => {
-
+  const submitEmployerForm = async (formData) => {
     try {
-      const response = await fetch(config.url.register, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          role: state.role.toUpperCase(),
-          ...state.formData.employerFormData,
-        }),
+      const { confirmPassword, ...filteredFormData } = formData;
+
+      const response = await axios.post(config.url.register, {
+        roleName: "EMPLOYER", // Using role as EMPLOYER for employer form data
+        ...filteredFormData,
       });
-  
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      
-      setUser(data);
-      setIsLoggedIn(true);
-      localStorage.setItem('userRole', data.role.roleName.toLowerCase());
-      navigate('/');
-      console.log("Registration successful:", data);
-      navigate("/");
+
+      return response.data;
+
     } catch (error) {
+      throw new Error(`Error submitting employer form: ${error.message}`);
+    }
+  };
+
+  const submitJobseekerForm = async (formData) => {
+    try {
+      const { confirmPassword, ...filteredFormData } = formData;
+
+      const response = await axios.post(config.url.register, {
+        roleName: "JOBSEEKER",
+        ...filteredFormData,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error submitting jobseeker form: ${error.message}`);
+    }
+  };
+
+  const handleSubmit = async (state) => {
+    try {
+      let responseData;
+
+      // Conditionally call the appropriate form submission function based on role
+      if (state.role === config.roles.employer) {
+        responseData = await submitEmployerForm(
+          state.formData.employerFormData
+        );
+      } else if (state.role === config.roles.jobseeker) {
+        responseData = await submitJobseekerForm(
+          state.formData.jobseekerFormData
+        );
+      } else {
+        throw new Error("Invalid role");
+      }
+
+
+      setUser(responseData);
+      setIsLoggedIn(true);
+      localStorage.setItem(
+        "userRole",
+        responseData.roleName
+      );
+      navigate("/");
+
+      console.log("Registration successful:", responseData);
+    } catch (error) {
+
       console.error("Registration failed:", error);
       alert("Failed to register. Please try again.");
     }
@@ -134,10 +171,10 @@ function Register() {
                 selectedRole={state.role}
                 onRoleSelect={handleRoleSelect}
               />
-            ) : state.role === "jobseeker" ? (
+            ) : state.role === config.roles.jobseeker ? (
               <JobSeekerForm
-                formData={state.formData}
-                onUpdateForm={handleUpdateForm}
+                formData={state.formData.jobseekerFormData}
+                onUpdateForm={handleUpdateJobseekerForm}
                 step={state.currentStep}
               />
             ) : (
@@ -149,12 +186,14 @@ function Register() {
             )}
           </div>
 
-          <NavigationButtons
-            currentStep={state.currentStep}
-            isLastStep={state.currentStep === STEPS.FINAL_STEPS}
-            onBack={handleBack}
-            onNext={handleNext}
-          />
+          {state.currentStep != STEPS.ROLE_SELECTION && (
+            <NavigationButtons
+              currentStep={state.currentStep}
+              isLastStep={state.currentStep === STEPS.FINAL_STEPS}
+              onBack={handleBack}
+              onNext={handleNext}
+            />
+          )}
         </Paper>
       </Container>
     </div>
