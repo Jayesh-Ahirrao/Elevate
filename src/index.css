@@ -80,8 +80,17 @@ button:focus-visible {
 
 
 /* Existing Index.css */
+
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Quicksand:wght@300;400;700&display=swap');
+
+*{
+  font-family: 'Quicksand', 'League Spartan', sans-serif ;
+
+}
+
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Quicksand', 'League Spartan', sans-serif ;
   line-height: 1.5;
   font-weight: 400;
 
@@ -95,8 +104,8 @@ button:focus-visible {
   -moz-osx-font-smoothing: grayscale;
 
   --primary-color: #38BFF0;
-  --primary-hover-color: #0c7398;
-  --background-color: #f0f2f5;
+  --primary-hover-color: #38BFF0;
+  --background-color: #ffffff;
   --text-color: #333;
   /* --text-color: #129822; */
   --label-color: #555;
@@ -116,6 +125,7 @@ a:hover {
 }
 
 body {
+
   margin: 0;
   display: flex;
   place-items: center;

@@ -103,7 +103,7 @@ const debounce = (func, wait) => {
   };
 };
 
-const dummyUDID = "MH123456789012";
+const dummyUDID = "MH7370419810000035";
 
 const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const [isUdidValid, setIsUdidValid] = useState(false);
@@ -128,8 +128,9 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   }, [step]);
 
   const validateUdid = (udid) => {
-    const regex = /^[A-Z]{2}\d{12}$/;
-    return regex.test(udid);
+    return true;
+    // const regex = /^[A-Z]{2}\d{12}$/;
+    // return regex.test(udid);
   };
 
   const handleUDIDChange = (e) => {
@@ -140,6 +141,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
 
   const debounceValidateUdid = debounce((udid) => {
     if (validateUdid(udid)) {
+      
       if (udid === dummyUDID) {
         setIsUdidValid(true);
       } else {

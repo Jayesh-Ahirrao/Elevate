@@ -3,6 +3,7 @@ import Navbar from '../LandingPage/Navbar/Navbar';
 import JobCard from '../LandingPage/JobCard/JobCard';
 import Footer from '../LandingPage/Footer/Footer';
 import './LandingPage.css';
+import { Link } from '@mui/material';
 
 function LandingPage() {
   const featuredJobs = [
@@ -39,10 +40,11 @@ function LandingPage() {
   return (
     <div className="">
       <Navbar />
+      {/* <Link to></Link> */}
       
       <main className="main-content">
         <section className="hero-section">
-          <h1>Welcome to Elevate</h1>
+          <h1 className='hero-Welcome'>Welcome to <span style={{color : "#38bff0", letterSpacing : "-4px"}}>elevate</span></h1>
           <p>Empowering careers, embracing abilities</p>
           <div className="cta-buttons">
             <button className="btn btn-primary">Find Jobs</button>
@@ -60,7 +62,7 @@ function LandingPage() {
         </section>
 
         <section className="info-section">
-          <h2>Why Choose Elevate?</h2>
+          <h2>Why Choose <span style={{letterSpacing : "-3px"}}>elevate</span> ?</h2>
           <div className="info-grid">
             <div className="info-card">
               <h3>Inclusive Opportunities</h3>
@@ -78,8 +80,8 @@ function LandingPage() {
         </section>
 
         <section className="thank-you">
-          <h2>Thank You for Choosing Elevate</h2>
-          <p>We're committed to breaking down barriers and creating equal opportunities in the workplace.</p>
+          <h2>thank you for choosing <span style={{fontFamily:"League Spartan"}}>us :) </span></h2>
+          <p>we're committed to breaking down barriers and creating equal opportunities in the workplace.</p>
         </section>
       </main>
 

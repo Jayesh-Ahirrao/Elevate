@@ -101,6 +101,7 @@ const validateJobSeeker = (currStep, formData) => {
       ) {
         return { valid: false, message: "Passwords do not match." };
       }
+      
       return { valid: true, message: "Basic info is valid." };
 
     case 2: // PERSONAL_INFO (First Name, Last Name, Contact, Gender, DOB, Address, State, City)

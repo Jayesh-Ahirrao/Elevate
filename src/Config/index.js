@@ -7,6 +7,7 @@ const config = {
         home: baseURL,
         login: `${baseURL}/login`,
         register: `${baseURL}/register`,
+        registerJobseekerTemp: `${baseURL}/register/jobseeker`,
     },
     roles: {
         jobseeker: 'jobseeker',

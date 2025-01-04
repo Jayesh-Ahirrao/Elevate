@@ -40,11 +40,13 @@
 }
 
 .social-links {
+  
   display: flex;
   gap: 1rem;
 }
 
 .social-links a {
+  margin: 0 auto 1rem;
   color: #4a5568;
   transition: color 0.2s ease;
 }

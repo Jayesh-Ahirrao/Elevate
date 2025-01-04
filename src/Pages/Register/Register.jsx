@@ -105,7 +105,7 @@ function Register() {
     try {
       const { confirmPassword, ...filteredFormData } = formData;
 
-      const response = await axios.post(config.url.register, {
+      const response = await axios.post(config.url.registerJobseekerTemp, {
         roleName: "JOBSEEKER",
         ...filteredFormData,
       });
@@ -132,13 +132,16 @@ function Register() {
         throw new Error("Invalid role");
       }
 
+      const username = state.role == config.roles.employer ? state.formData.employerFormData.fname : state.formData.jobseekerFormData.fname;
 
-      setUser(responseData);
+
+
+      setUser({...responseData , fname: username});
       setIsLoggedIn(true);
-      localStorage.setItem(
-        "userRole",
-        responseData.roleName
-      );
+      // localStorage.setItem(
+      //   "userRole",
+      //   responseData.roleName
+      // );
       navigate("/");
 
       console.log("Registration successful:", responseData);
@@ -156,10 +159,10 @@ function Register() {
           <div className={styles.header}>
             {/* <UserCircle size={48} className="mx-auto mb-4" /> */}
             <Typography variant="h4" gutterBottom>
-              Elevate : Job Board
+              <span style={{fontFamily:"League Spartan", fontWeight:"bolder", fontSize : "45px", letterSpacing : "-4px"}}>elevate</span> <span style={{fontFamily:"Quicksand", fontWeight:"light"}}>jobs</span>
             </Typography>
             <Typography variant="body1" className={styles.title}>
-              elevate with your ABILITIES
+              elevate with your abilities
             </Typography>
           </div>
 
