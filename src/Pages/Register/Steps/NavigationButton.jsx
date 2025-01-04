@@ -5,7 +5,7 @@ import styles from '../Registration.module.css';
 const NavigationButtons = ({ currentStep, isLastStep, onBack, onNext }) => {
   return (
     <div className={styles.navigationButtons}>
-      <Button disabled={currentStep === 0} onClick={onBack}>
+      <Button  onClick={onBack}>
         Back
       </Button>
       <Button variant="contained" onClick={onNext}>

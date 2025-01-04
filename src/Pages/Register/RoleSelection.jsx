@@ -2,13 +2,14 @@ import React from 'react';
 import { Building2, UserCircle } from 'lucide-react';
 import { Typography, Paper } from '@mui/material';
 import styles from './Registration.module.css';
+import config from '../../Config';
 
 const RoleSelection = ({ selectedRole, onRoleSelect }) => {
   return (
     <div className={styles.roleSelection}>
       <Paper 
-        className={`${styles.roleCard} ${selectedRole === 'employer' ? styles.roleCardSelected : ''}`}
-        onClick={() => onRoleSelect('employer')}
+        className={`${styles.roleCard} ${selectedRole === config.roles.employer ? styles.roleCardSelected : ''}`}
+        onClick={() => onRoleSelect(config.roles.employer)}
         elevation={3}
       >
         <Building2 size={48} className="mb-4" />
@@ -21,8 +22,8 @@ const RoleSelection = ({ selectedRole, onRoleSelect }) => {
       </Paper>
 
       <Paper 
-        className={`${styles.roleCard} ${selectedRole === 'jobseeker' ? styles.roleCardSelected : ''}`}
-        onClick={() => onRoleSelect('jobseeker')}
+        className={`${styles.roleCard} ${selectedRole === config.roles.jobseeker ? styles.roleCardSelected : ''}`}
+        onClick={() => onRoleSelect(config.roles.jobseeker)}
         elevation={3}
       >
         <UserCircle size={48} className="mb-4" />
