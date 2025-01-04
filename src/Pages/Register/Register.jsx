@@ -1,22 +1,22 @@
+import { Container, Paper, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../App";
-import { Container, Typography, Paper } from "@mui/material";
-import axios from "axios";
 
 // import { UserCircle } from 'lucide-react';
 
 import styles from "./Registration.module.css";
 
-import RoleSelection from "./RoleSelection";
-import JobSeekerForm from "./Forms/JobSeekerForm";
-import NavigationButtons from "./Steps/NavigationButton";
 import EmployerForm from "./Forms/EmployerForm";
+import JobSeekerForm from "./Forms/JobSeekerForm";
+import RoleSelection from "./RoleSelection";
+import NavigationButtons from "./Steps/NavigationButton";
 import StepIndicator from "./Steps/StepIndicator";
 
-import { validateForm } from "../../Config/formValidation";
-import { INITIAL_STATE, STEPS } from "../../Config/constants";
-import config from "../../Config";
 import { useNavigate } from "react-router-dom";
+import config from "../../Config";
+import { INITIAL_STATE, STEPS } from "../../Config/constants";
+import { validateForm } from "../../Config/formValidation";
 
 function Register() {
   const { setUser, setIsLoggedIn } = useContext(UserContext);
