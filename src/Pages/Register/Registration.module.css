@@ -10,10 +10,11 @@
 .formCard {
   max-width: 800px;
   margin: 0 auto;
-  background: transparent !important;
+  background: #ffffff;
   border-radius: 16px;
-  /* box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12); */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   overflow: hidden;
+ 
 }
 
 .title{
@@ -26,7 +27,7 @@
   padding: 2rem;
   background: #38BFF0;
   color: white;
-  border-radius: 20px;
+
 
 }
 
@@ -42,15 +43,14 @@
   padding: 2rem;
   border-radius: 20px;
   cursor: pointer;
-  transition: all 1s ease;
- 
+  transition: all 10s ease;
 }
 
 .roleCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 15px #cfcaca;
-  background-color: #e8e8e8;
-  /* color: white; */
+  background-color: #e8e8e8; 
+ 
 
 }
 
@@ -67,6 +67,6 @@
   display: flex;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: transparent !important;
+  background: #ffffff;
   color:var(--primary-color);
 }

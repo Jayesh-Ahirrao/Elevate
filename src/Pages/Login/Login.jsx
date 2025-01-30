@@ -49,7 +49,18 @@ const Login = () => {
             setUser(data);
             setIsLoggedIn(true);
             localStorage.setItem('userRole', data.role.roleName.toLowerCase());
-            navigate('/');
+
+
+            //
+            if (data.role.roleName.toLowerCase() === 'employer') {
+                navigate('/EmployerDashboard');
+            } else {
+                navigate('/');
+            }
+            //
+
+
+            
         } catch (error) {
             console.error('Error:', error);
             setError('Login failed. Please try again.');

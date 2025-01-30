@@ -3,7 +3,9 @@ import Navbar from '../LandingPage/Navbar/Navbar';
 import JobCard from '../LandingPage/JobCard/JobCard';
 import Footer from '../LandingPage/Footer/Footer';
 import './LandingPage.css';
-import { Link } from '@mui/material';
+import { Link, Slide } from '@mui/material';
+import SlideShow from './SlideShow/SlideShow';
+
 
 function LandingPage() {
   const featuredJobs = [
@@ -41,6 +43,8 @@ function LandingPage() {
     <div className="">
       <Navbar />
       {/* <Link to></Link> */}
+
+      <SlideShow/>
       
       <main className="main-content">
         <section className="hero-section">
