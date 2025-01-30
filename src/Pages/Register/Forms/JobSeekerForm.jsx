@@ -110,43 +110,40 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   }, [formData.state]);
 
   
-  const validateUdid = (udid) => {
-    return true;
-    // const regex = /^[A-Z]{2}\d{12}$/;
-    // return regex.test(udid);
+   // Function to validate UDID from the backend
+   const validateUdidFromServer = async (udid) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/validate-udid?udid=${udid}`
+      );
+      const isValid = await response.json();
+      setIsUdidValid(isValid);
+    } catch (error) {
+      console.error("Error validating UDID:", error);
+      setIsUdidValid(false);
+    }
   };
 
   const handleUDIDChange = (e) => {
     setIsUDIDTouched(true);
-    onUpdateForm("udid", e.target.value.toUpperCase());
-    debounceValidateUdid(e.target.value.toUpperCase());
+    const newUdid = e.target.value.toUpperCase();
+    onUpdateForm("udid", newUdid);
+    debounceValidateUdid(newUdid);
   };
 
   const debounceValidateUdid = debounce((udid) => {
-    if (validateUdid(udid)) {
-      
-      if (udid === dummyUDID) {
-        setIsUdidValid(true);
-      } else {
-        setIsUdidValid(false);
-        setIsUDIDTouched(true);
-      }
-    } else {
-      setIsUdidValid(false);
-      setIsUDIDTouched(true);
-    }
+    validateUdidFromServer(udid);
   }, 300);
 
   const getUdidHelperText = () => {
     if (isUdidValid) {
       return "UDID validated";
     } else if (isUDIDTouched) {
-      return validateUdid(formData.udid)
-        ? "Invalid UDID"
-        : "Invalid UDID format";
+      return "Invalid UDID";
     }
     return "";
   };
+
 
   const handleStateChange = (e) => {
     onUpdateForm("state", e.target.value);
@@ -159,21 +156,21 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
         return (
           <>
             <TextField
-              fullWidth
-              //add maxlen 12 for input
-              label="Enter UDID Number"
-              type="text"
-              value={formData.udid || ""}
-              onChange={handleUDIDChange}
-              margin="normal"
-              required
-              inputRef={udidRef}
-              error={!isUdidValid && formData.udid}
-              helperText={getUdidHelperText()}
-              FormHelperTextProps={{
-                style: { color: isUdidValid ? "green" : "red" },
-              }}
-            />
+            fullWidth
+            label="Enter UDID Number"
+            type="text"
+            value={formData.udid || ""}
+            onChange={handleUDIDChange}
+            margin="normal"
+            required
+            inputRef={udidRef}
+            error={!isUdidValid && isUDIDTouched}
+            helperText={getUdidHelperText()}
+            FormHelperTextProps={{
+              style: { color: isUdidValid ? "green" : "red" },
+            }}
+          />
+
 
             <FormControl fullWidth margin="normal">
               <InputLabel>Disability Categories</InputLabel>
