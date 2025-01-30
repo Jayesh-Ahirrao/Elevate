@@ -15,44 +15,6 @@ import {
   ListItemText,
 } from "@mui/material";
 
-// Array of states
-const states = [
-  { id: 1, name: "California" },
-  { id: 2, name: "Texas" },
-  { id: 3, name: "Florida" },
-  { id: 4, name: "New York" },
-];
-
-const cityMap = {
-  1: {
-    cities: [
-      { id: 1, name: "Los Angeles" },
-      { id: 2, name: "San Francisco" },
-      { id: 3, name: "San Diego" },
-    ],
-  },
-  2: {
-    cities: [
-      { id: 4, name: "Houston" },
-      { id: 5, name: "Dallas" },
-      { id: 6, name: "Austin" },
-    ],
-  },
-  3: {
-    cities: [
-      { id: 7, name: "Miami" },
-      { id: 8, name: "Orlando" },
-      { id: 9, name: "Tampa" },
-    ],
-  },
-  4: {
-    cities: [
-      { id: 10, name: "New York City" },
-      { id: 11, name: "Buffalo" },
-      { id: 12, name: "Rochester" },
-    ],
-  },
-};
 
 const skillsetPool = [
   { id: 1, name: "JavaScript" },
@@ -109,6 +71,8 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const [isUdidValid, setIsUdidValid] = useState(false);
   const [isUDIDTouched, setIsUDIDTouched] = useState(false);
   const [disabilityCategories, setDisabilityCategories] = useState([]);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
   const udidRef = useRef(null);
 
   useEffect(() => {
@@ -127,6 +91,25 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
     }
   }, [step]);
 
+  useEffect(() => {
+    fetch("http://localhost:8080/api/states")
+      .then((response) => response.json())
+      .then((data) => setStates(data))
+      .catch((error) => console.error("Error fetching states:", error));
+  }, []);
+
+  useEffect(() => {
+    if (formData.state) {
+      fetch(`http://localhost:8080/api/cities?stateId=${formData.state}`)
+        .then((response) => response.json())
+        .then((data) => setCities(data))
+        .catch((error) => console.error("Error fetching cities:", error));
+    } else {
+      setCities([]);
+    }
+  }, [formData.state]);
+
+  
   const validateUdid = (udid) => {
     return true;
     // const regex = /^[A-Z]{2}\d{12}$/;
@@ -323,19 +306,18 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
               margin="normal"
               required
             />
-            <Grid container spacing={2}>
+             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <FormControl fullWidth margin="normal">
                   <InputLabel>State</InputLabel>
                   <Select
-                    label="State"
                     value={formData.state || ""}
                     onChange={handleStateChange}
                     required
                   >
                     {states.map((state) => (
-                      <MenuItem key={state.id} value={state.id}>
-                        {state.name}
+                      <MenuItem key={state.stateId} value={state.stateId}>
+                        {state.stateName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -345,18 +327,16 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
                 <FormControl fullWidth margin="normal">
                   <InputLabel>City</InputLabel>
                   <Select
-                    label="City"
                     value={formData.city || ""}
                     onChange={(e) => onUpdateForm("city", e.target.value)}
                     required
                     disabled={!formData.state}
                   >
-                    {formData.state &&
-                      cityMap[formData.state].cities.map((city) => (
-                        <MenuItem key={city.id} value={city.id}>
-                          {city.name}
-                        </MenuItem>
-                      ))}
+                    {cities.map((city) => (
+                      <MenuItem key={city.cityId} value={city.cityId}>
+                        {city.cityName}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
