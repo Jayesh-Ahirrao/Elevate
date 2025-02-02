@@ -65,7 +65,7 @@ const debounce = (func, wait) => {
   };
 };
 
-const dummyUDID = "MH7370419810000035";
+
 
 const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const [isUdidValid, setIsUdidValid] = useState(false);
