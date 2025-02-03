@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../../App";
 import {
   Box,
   Card,
@@ -33,6 +34,14 @@ const mockJobs = [
 ];
 
 export default function Dashboard() {
+
+  const { user } = useContext(UserContext); // Get user from context
+
+  // Extract job-related data from user
+  const totalJobsPosted = user?.total_job_posted || 0;
+  const totalCandidatesHired = user?.total_cand_hired || 0;
+  const activeJobPosts = user?.active_job_posts || 0;
+
   const [jobFilter, setJobFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("newest");
 
@@ -50,7 +59,7 @@ export default function Dashboard() {
           >
             <CardContent>
               <Typography variant="h6">Total Jobs Posted</Typography>
-              <Typography variant="h3">24</Typography>
+              <Typography variant="h3">{totalJobsPosted}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -65,7 +74,7 @@ export default function Dashboard() {
           >
             <CardContent>
               <Typography variant="h6">Active Jobs</Typography>
-              <Typography variant="h3">12</Typography>
+              <Typography variant="h3">{activeJobPosts}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -80,7 +89,7 @@ export default function Dashboard() {
           >
             <CardContent>
               <Typography variant="h6">Total Hired</Typography>
-              <Typography variant="h3">45</Typography>
+              <Typography variant="h3">{totalCandidatesHired}</Typography>
             </CardContent>
           </Card>
         </Grid>
