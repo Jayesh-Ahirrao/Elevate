@@ -1,11 +1,18 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from "../LandingPage/Navbar/Navbar";
 import JobCard from "../LandingPage/JobCard/JobCard";
 import Footer from "../LandingPage/Footer/Footer";
 import "./LandingPage.css";
-
 import SlideShow from "./SlideShow/SlideShow";
 
 function LandingPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Using fallback to ensure we always have a value for isEmployer
+  const isEmployer = location.state?.isEmployer || false;  // Defaulting to false if undefined
+  console.log("isEmployer:", isEmployer);  // Debugging log to check the state value
+
   const featuredJobs = [
     {
       title: "Software Developer",
@@ -36,11 +43,20 @@ function LandingPage() {
     }
   ];
 
+  const handlePostJobClick = () => {
+    console.log("Post job button clicked");
+    if (isEmployer) {
+      console.log("Navigating to dashboard");
+      // If user is employer, navigate to the employer dashboard
+      navigate("/dashboard");
+    } else {
+      alert("You need to be an employer to post a job.");
+    }
+  };
+
   return (
     <div className="">
       <Navbar />
-      {/* <Link to></Link> */}
-
       <SlideShow />
 
       <main className="main-content">
@@ -54,7 +70,12 @@ function LandingPage() {
           <p>Empowering careers, embracing abilities</p>
           <div className="cta-buttons">
             <button className="btn btn-primary">Find Jobs</button>
-            <button className="btn btn-secondary">Post a Job</button>
+            <button
+              className="btn btn-secondary"
+              onClick={handlePostJobClick}  // Handle "Post Job" click
+            >
+              Post a Job
+            </button>
           </div>
         </section>
 
@@ -100,8 +121,7 @@ function LandingPage() {
             <span style={{ fontFamily: "League Spartan" }}>us </span>
           </h2>
           <p>
-            were committed to breaking down barriers and creating equal
-            opportunities in the workplace.
+            were committed to breaking down barriers and building up talents.
           </p>
         </section>
       </main>

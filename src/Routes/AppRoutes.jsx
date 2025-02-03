@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import Layout from "../components/Layout";  // Import the Layout component
+import Layout from "../components/Layout";  
 
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
@@ -9,6 +9,7 @@ import Dashboard from "../Pages/employer/Dashboard";
 import Applicants from "../Pages/employer/Applicants";
 import Meetings from "../Pages/employer/Meetings";
 import Settings from "../Pages/employer/Settings";
+import JobPost from "../Pages/employer/JobPost"
 
 const AppRoutes = ({ userRole, isLoggedIn }) => {
   return (
@@ -23,11 +24,11 @@ const AppRoutes = ({ userRole, isLoggedIn }) => {
         userRole === "EMPLOYER" ? (
           <>
             {/* Wrap dashboard-related routes with Layout */}
-            <Route path="/" element={<Layout children={<Dashboard />} />} />
             <Route path="/dashboard" element={<Layout children={<Dashboard />} />} />
             <Route path="/applicants" element={<Layout children={<Applicants />} />} />
             <Route path="/meetings" element={<Layout children={<Meetings />} />} />
             <Route path="/settings" element={<Layout children={<Settings />} />} />
+            <Route path="/post-job" element={<Layout children={<JobPost />} />} />
             <Route path="/*" element={<Navigate to="/dashboard" />} />
           </>
         ) : (

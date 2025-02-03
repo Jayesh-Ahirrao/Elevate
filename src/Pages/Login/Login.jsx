@@ -40,13 +40,10 @@ const Login = () => {
       setUser(employer);
       setIsLoggedIn(true);
 
-      // Check if role is 'EMPLOYER' and navigate accordingly
+      // Redirect based on role
       if (employer.roleName === "EMPLOYER") {
-        console.log("Redirecting to employer dashboard");
-        console.log("Employer role:", employer.roleName);
         navigate("/dashboard");
       } else {
-        console.log("Redirecting to landing page");
         navigate("/");
       }
     } catch (error) {

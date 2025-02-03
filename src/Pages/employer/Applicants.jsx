@@ -40,7 +40,7 @@ export default function Applicants() {
   });
 
   return (
-    <Box sx={{ p: 3, backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
+    <Box>
       <Typography
         variant="h5"
         sx={{ mb: 3, fontWeight: "bold", color: "#1976d2" }}
@@ -48,24 +48,45 @@ export default function Applicants() {
         APPLICANTS
       </Typography>
 
-      <Box sx={{ mb: 3, display: "flex", gap: 2, flexWrap: "wrap" }}>
-        <FormControl sx={{ minWidth: 160 }}>
-          <InputLabel>Job Status</InputLabel>
-          <Select defaultValue="all" label="Job Status">
-            <MenuItem value="all">All Jobs</MenuItem>
-            <MenuItem value="openings">Openings</MenuItem>
-            <MenuItem value="closed">Closed Jobs</MenuItem>
-          </Select>
-        </FormControl>
+      {/* Filter and Search Section (Updated to Match Dashboard.jsx) */}
+      <Box
+        sx={{
+          mb: 3,
+          display: "flex",
+          justifyContent: "space-between",
+          backgroundColor: "#f5f5f5",
+          padding: 2,
+          borderRadius: "8px"
+        }}
+      >
+        {/* Left side: Job Status and Search */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Job Status</InputLabel>
+            <Select defaultValue="all" label="Job Status">
+              <MenuItem value="all">All Jobs</MenuItem>
+              <MenuItem value="openings">Openings</MenuItem>
+              <MenuItem value="closed">Closed Jobs</MenuItem>
+            </Select>
+          </FormControl>
 
-        <TextField
-          label="Search"
-          variant="outlined"
-          size="small"
-          sx={{ flexGrow: 1, minWidth: 200 }}
-        />
+          {/* Search field */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            size="small"
+            sx={{
+              width: "160px",
+              backgroundColor: "white",
+              borderRadius: "4px",
+              height: "40px",
+              input: { height: "21px" }
+            }}
+          />
+        </Box>
 
-        <FormControl sx={{ minWidth: 160 }}>
+        {/* Right side: Sort By */}
+        <FormControl sx={{ minWidth: 120 }}>
           <InputLabel>Sort By</InputLabel>
           <Select defaultValue="newest" label="Sort By">
             <MenuItem value="newest">Newest</MenuItem>
@@ -146,53 +167,6 @@ export default function Applicants() {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Dialog open={openMeeting} onClose={() => setOpenMeeting(false)}>
-        <DialogTitle>Schedule Interview</DialogTitle>
-        <DialogContent>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}>
-            <TextField
-              label="Interview Time"
-              type="datetime-local"
-              value={meetingData.time}
-              onChange={e =>
-                setMeetingData({ ...meetingData, time: e.target.value })}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              label="Duration (minutes)"
-              type="number"
-              value={meetingData.duration}
-              onChange={e =>
-                setMeetingData({ ...meetingData, duration: e.target.value })}
-            />
-            <FormControl>
-              <InputLabel>Interview Type</InputLabel>
-              <Select
-                value={meetingData.type}
-                label="Interview Type"
-                onChange={e =>
-                  setMeetingData({ ...meetingData, type: e.target.value })}
-              >
-                <MenuItem value="online">Online</MenuItem>
-                <MenuItem value="onsite">Onsite</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenMeeting(false)} sx={{ color: "red" }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: "#1976d2", color: "white" }}
-            onClick={() => setOpenMeeting(false)}
-          >
-            Send Meeting
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

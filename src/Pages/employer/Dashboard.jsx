@@ -94,7 +94,7 @@ export default function Dashboard() {
           backgroundColor: "#f5f5f5",
           padding: 2,
           borderRadius: "8px"
-        }}
+        }}  
       >
         {/* Left side: Job Status and Search */}
         <Box sx={{ display: "flex", gap: 2 }}>
