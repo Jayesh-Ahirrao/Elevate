@@ -6,6 +6,7 @@ import RoleBasedRoutes from './RoleBasedRoutes';
 import Login from '../Pages/Login/Login';
 import Register from '../Pages/Register/Register';
 import LandingPage from '../Pages/LandingPage/LandindPage';
+import EmployerDashboard from '../Pages/Dashboard/Employer/Components/EmployerDashboard/EmployerDashboard';
 
 
 
@@ -17,6 +18,7 @@ const AppRoutes = ({ userRole, isLoggedIn }) => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/unauthorized" element={<h2>unauthorized</h2>} />
+            <Route path="/dashboard" element={<EmployerDashboard/>} />
 
             {/* Role-Based Routes */}
             {isLoggedIn && (

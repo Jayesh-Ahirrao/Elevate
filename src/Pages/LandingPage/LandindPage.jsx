@@ -4,7 +4,7 @@ import JobCard from '../LandingPage/JobCard/JobCard';
 import Footer from '../LandingPage/Footer/Footer';
 import './LandingPage.css';
 import { Link, Slide } from '@mui/material';
-import SlideShow from './SlideShow/SlideShow';
+
 
 
 function LandingPage() {
@@ -44,7 +44,7 @@ function LandingPage() {
       <Navbar />
       {/* <Link to></Link> */}
 
-      <SlideShow/>
+      
       
       <main className="main-content">
         <section className="hero-section">
