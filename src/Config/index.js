@@ -1,19 +1,19 @@
 // export a config object for cofigured api end point as localhost as of now
 
-const baseURL =  'http://localhost:8081';
+const baseURL = "http://localhost:8081";
 
 const config = {
-    url: {
-        home: baseURL,
-        login: `${baseURL}/login`,
-        register: `${baseURL}/register`,
-        registerJobseekerTemp: `${baseURL}/register/jobseeker`,
-    },
-    roles: {
-        jobseeker: 'jobseeker',
-        employer: 'employer',
-        admin: 'admin'
-    }
-}
+  url: {
+    home: baseURL,
+    login: `${baseURL}/login`,
+    register: `${baseURL}/register`,
+    registerJobseekerTemp: `${baseURL}/register/jobseeker`
+  },
+  roles: {
+    jobseeker: "jobseeker",
+    employer: "employer",
+    admin: "admin"
+  }
+};
 
 export default config;

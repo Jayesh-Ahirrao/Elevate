@@ -15,14 +15,18 @@
     width: 100%;
   }
   
+  .heading {
+    font-family: 'League Spartan', sans-serif !important;
+  }
+
   .hero-section {
     text-align: center;
     padding: 4rem 2rem;
-    background: linear-gradient(rgba(56, 191, 240, 0.1), rgba(56, 191, 240, 0.05));
+    background: url('/public/Header.png') no-repeat center center/cover;
     border-radius: 16px;
     margin-bottom: 4rem;
-    
-  }
+    color: white; /* Ensure text is readable on the background */
+}
 
   .hero-Welcome{
     font-family: 'League Spartan', sans-serif;
@@ -30,14 +34,14 @@
   
   .hero-section h1 {
     font-size: 3rem;
-    color: #2d3748;
+    color: #ffffff;
     margin-bottom: 1rem;
     font-weight: 700;
   }
   
   .hero-section p {
     font-size: 1.25rem;
-    color: #4a5568;
+    color: #ffffff;
     margin-bottom: 2rem;
   }
   
@@ -120,7 +124,7 @@
   
   .info-card {
     padding: 1.5rem;
-    background: white;
+    background: rgb(233, 248, 255);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(56, 191, 240, 0.1);
   }
@@ -147,7 +151,7 @@
   
   .thank-you h2 {
     font-size: 2rem;
-    color: var(--primary-color);
+    color: #38BFF0;
     margin-bottom: 1rem;
     font-weight: 600;
     font-weight: lighter;
