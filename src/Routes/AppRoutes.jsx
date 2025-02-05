@@ -46,7 +46,9 @@ const AppRoutes = ({ userRole, isLoggedIn }) => {
           {userRole === "JOBSEEKER" && (
             <>
               <Route path="/landing" element={<Layout><LandindPage /></Layout>} /> {/* Or your JobSeeker component */}
+
               {/* Add other job seeker routes */}
+
               <Route path="/*" element={<Navigate to="/landing" />} /> {/* Catch-all for job seeker */}
             </>
           )}
@@ -56,6 +58,7 @@ const AppRoutes = ({ userRole, isLoggedIn }) => {
         </>
       ) : (
         <>
+          <Route path="/"  element={<LandindPage />} />
           <Route path="/login" element={<Login />} />  {/* Explicitly include login route when not logged in */}
           <Route path="/register" element={<Register />} />  {/* Explicitly include register route when not logged in */}
           <Route path="/*" element={<Navigate to="/login" />} /> {/* Redirect all other routes to login */}
