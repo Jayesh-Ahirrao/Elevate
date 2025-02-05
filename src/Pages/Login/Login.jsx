@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../Login/Login.module.css";
 import config from "../../Config";
 import { UserContext } from "../../App";
+import { User } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ const Login = () => {
   
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Invalid credentials: ${errorText}`);
+        throw new Error(`${errorText}`);
       }
   
       const responseData = await response.json();
@@ -61,10 +62,12 @@ const Login = () => {
       }
   
       localStorage.setItem("userData", JSON.stringify({ token, userData }));
-      setUser(userData.roleName.toLowerCase());
-      console.log();
+
+      console.log("hereeeeeeeeeeeeeee",userData.roleName);
       
+      setUser(userData.roleName);
       setIsLoggedIn(true);
+      
   
       // Redirect based on role
       if (userData.roleName === "EMPLOYER") {

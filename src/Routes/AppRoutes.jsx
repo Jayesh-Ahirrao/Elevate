@@ -12,6 +12,10 @@ import Settings from "../Pages/employer/Settings";
 import JobPost from "../Pages/employer/JobPost";
 
 const AppRoutes = ({ userRole, isLoggedIn }) => {
+
+  console.log("Logged-in Status in approutes", isLoggedIn);  // Debuggingggggggggggggg
+  console.log("Setted User in approutes", userRole); 
+
   return (
     <Routes>
       <Route path="/" element={<LandindPage />} />
@@ -22,6 +26,9 @@ const AppRoutes = ({ userRole, isLoggedIn }) => {
       {/* <Route path="/unauthorized" element={<h2>Unauthorized</h2>} /> */}
 
       {/* More concise protected routes */}
+
+      
+
       {isLoggedIn ? (
         <>
           {userRole === "EMPLOYER" && (
