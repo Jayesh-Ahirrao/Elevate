@@ -13,12 +13,7 @@ const Login = () => {
 
   
   const { setUser, setIsLoggedIn } = useContext(UserContext);
-
- 
-  
   const navigate = useNavigate();
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,6 +81,7 @@ const Login = () => {
   
 
   return (
+    <div className={styles.loginPageWrapper}>
     <div className={styles.formContainer}>
       <h2 className={styles.title}>Login</h2>
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -118,6 +114,7 @@ const Login = () => {
         <p className={styles.error}>
           {error}
         </p>}
+    </div>
     </div>
   );
 };

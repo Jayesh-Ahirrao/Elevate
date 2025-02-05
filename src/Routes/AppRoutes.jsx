@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Layout from "../components/Layout";
-
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import LandindPage from "../Pages/LandingPage/LandindPage";
