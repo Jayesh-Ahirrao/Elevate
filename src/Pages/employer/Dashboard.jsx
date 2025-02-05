@@ -5,7 +5,7 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid2,
+  Grid,
   Select,
   MenuItem,
   TextField,
@@ -47,8 +47,8 @@ export default function Dashboard() {
 
   return (
     <Box>
-      <Grid2 container spacing={3} sx={{ mb: 4 }}>
-        <Grid2 item xs={12} sm={4}>
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} sm={4}>
           <Card
             sx={{
               background: "linear-gradient(135deg, #38BFF0, #007bb2)",
@@ -62,8 +62,8 @@ export default function Dashboard() {
               <Typography variant="h3">{totalJobsPosted}</Typography>
             </CardContent>
           </Card>
-        </Grid2>
-        <Grid2 item xs={12} sm={4}>
+        </Grid>
+        <Grid item xs={12} sm={4}>
           <Card
             sx={{
               background: "linear-gradient(135deg, #4CAF50, #2E7D32)",
@@ -77,8 +77,8 @@ export default function Dashboard() {
               <Typography variant="h3">{activeJobPosts}</Typography>
             </CardContent>
           </Card>
-        </Grid2>
-        <Grid2 item xs={12} sm={4}>
+        </Grid>
+        <Grid item xs={12} sm={4}>
           <Card
             sx={{
               background: "linear-gradient(135deg, #FF9800, #F57C00)",
@@ -92,8 +92,8 @@ export default function Dashboard() {
               <Typography variant="h3">{totalCandidatesHired}</Typography>
             </CardContent>
           </Card>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
 
       <Box
         sx={{

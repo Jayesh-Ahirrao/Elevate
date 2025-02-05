@@ -11,7 +11,11 @@ function LandingPage() {
   
   // Using fallback to ensure we always have a value for isEmployer
   const isEmployer = location.state?.isEmployer || false;  // Defaulting to false if undefined
+  const isJobSeeker = location.state?.isJobSeeker || false;
   console.log("isEmployer:", isEmployer);  // Debugging log to check the state value
+  console.log("isJobSeeker", isJobSeeker);
+  
+  
 
   const featuredJobs = [
     {

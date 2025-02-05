@@ -9,42 +9,68 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  
   const { setUser, setIsLoggedIn } = useContext(UserContext);
+
+ 
+  
   const navigate = useNavigate();
 
 
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
+  
     if (!email || !password) {
       setError("Please fill in all fields");
       setLoading(false);
       return;
     }
-
+  
     try {
       const response = await fetch(`${config.url.home}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Invalid credentials");
+        const errorText = await response.text();
+        throw new Error(`Invalid credentials: ${errorText}`);
       }
-
-      const { token, data } = await response.json();
-
-      localStorage.setItem("userData", JSON.stringify({ token, data }));
-      setUser(data.roleName);
+  
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+  
+      const { token, jobSeeker, employer } = responseData;
+  
+      // Determine user role and data
+      let userData = null;
+  
+      if (jobSeeker) {
+        userData = jobSeeker;
+      } else if (employer) {
+        userData = employer;
+      }
+  
+      if (!token || !userData) {
+        throw new Error("Missing token or user data in response");
+      }
+  
+      localStorage.setItem("userData", JSON.stringify({ token, userData }));
+      setUser(userData.roleName.toLowerCase());
+      console.log();
+      
       setIsLoggedIn(true);
-
+  
       // Redirect based on role
-      if (data.roleName === "EMPLOYER") {
+      if (userData.roleName === "EMPLOYER") {
         navigate("/dashboard");
+      } else if (userData.roleName === "JOBSEEKER") {
+        navigate("/landing");
       } else {
         navigate("/");
       }
@@ -54,6 +80,7 @@ const Login = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className={styles.formContainer}>

@@ -6,9 +6,8 @@
 
 *{
   font-family: 'Quicksand', 'League Spartan', sans-serif ;
-
-
 }
+
 :root {
   font-family: 'Quicksand', 'League Spartan', sans-serif ;
   /* line-height: 1.5;
@@ -33,10 +32,10 @@
   --input-background-color: inherit;
   --register-text-color: #555;
   --register-link-color: #38BFF0;
+  padding: 2rem 2rem;
+
 }
-
   
-
 a {
   font-weight: 500;
   color: #0c7398;
