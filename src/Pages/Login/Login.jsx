@@ -96,13 +96,16 @@ const Login = () => {
           <button
             type="submit"
             className={styles.loginButton}
-            disabled={loading}
+            disabled={loading}        
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
         <p>
           New here? <Link to="/register">Register</Link>
+        </p>
+        <p>
+          <Link to="/forgot-password">Forgot Password?</Link>
         </p>
         {error &&
           <p className={styles.error}>

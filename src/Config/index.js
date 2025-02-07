@@ -1,6 +1,7 @@
 // export a config object for cofigured api end point as localhost as of now
 
 const baseURL = "http://localhost:8080";
+const authURL = "http://localhost:8080/api/auth";
 
 const config = {
   url: {
@@ -9,7 +10,9 @@ const config = {
     register: `${baseURL}/register`,
     registerJobseekerTemp: `${baseURL}/register/jobseeker`,
     updateProfile: `${baseURL}/api/employer/update-profile`, // New endpoint for updating profile
-    changePassword: `${baseURL}/api/employer/change-password`
+    forgotPassword: `${authURL}/forgot-password`, // Updated Endpoint
+    resendOtp: `${authURL}/resend-otp`, // New Resend OTP Endpoint
+    resetPassword: `${authURL}/reset-password`
   },
   roles: {
     jobseeker: "jobseeker",

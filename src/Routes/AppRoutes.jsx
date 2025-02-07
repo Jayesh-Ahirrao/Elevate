@@ -9,6 +9,7 @@ import Applicants from "../Pages/employer/Applicants";
 import Meetings from "../Pages/employer/Meetings";
 import Settings from "../Pages/employer/Settings";
 import JobPost from "../Pages/employer/JobPost";
+import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword ";
 import { UserContext } from "../App";
 
 const AppRoutes = () => {
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {isLoggedIn ? (
         role === "EMPLOYER" ? (
