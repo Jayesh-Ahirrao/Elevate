@@ -52,7 +52,7 @@ const AppRoutes = () => {
 
       {role === "ADMIN" && (
         <>
-          <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
+          <Route path="/analytics" element={<Analytics />} />
           <Route path="/*" element={<Navigate to="/analytics" />} />
         </>
       )}

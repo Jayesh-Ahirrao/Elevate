@@ -26,16 +26,6 @@ const Login = () => {
     }
 
     try {
-      // Check for hardcoded admin credentials
-      if (email === "admin1@example.com" && password === "admin123") {
-        localStorage.setItem("userRole", "ADMIN");
-        setUser({ roleName: "ADMIN" });
-        setIsLoggedIn(true);
-        navigate("/admin-dashboard"); 
-        return;
-      }
-
-      // API Call for JobSeeker & Employer Login
       const response = await fetch(`${config.url.home}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -48,34 +38,36 @@ const Login = () => {
       }
 
       const responseData = await response.json();
+
       console.log("API Response:", responseData);
 
-      const { token, jobSeeker, employer } = responseData;
-      let userData = employer || jobSeeker; // Assign correct user object
+      const { token, jobSeeker, employer, admin } = responseData;
 
+      let userData = admin || employer || jobSeeker;
+      
       if (!token || !userData) {
-        throw new Error("Missing token or user data in response");
+          throw new Error("Missing token or user data in response");
       }
-
+      
+      
       // Save user data in localStorage
       localStorage.setItem("userData", JSON.stringify({ token, userData }));
       localStorage.setItem("userRole", userData.roleName);
       localStorage.setItem("isLoggedIn", "true");
-
+      
       setUser(userData);
       setIsLoggedIn(true);
-
+      
       // Redirect based on role
-      if (userData.roleName === "EMPLOYER") {
-        navigate("/dashboard");
+      if (userData.roleName === "ADMIN") {
+          navigate("/analytics");
+      } else if (userData.roleName === "EMPLOYER") {
+          navigate("/dashboard");
       } else if (userData.roleName === "JOBSEEKER") {
-        navigate("/landing");
-      }else if(userData.roleName === "ADMIN"){
-        navigate("/analytics")
-      }
-      else {
-        navigate("/");
-      }
+          navigate("/landing");
+      } else {
+          navigate("/");
+      }      
     } catch (error) {
       setError(error.message || "Login failed. Try again.");
     } finally {
