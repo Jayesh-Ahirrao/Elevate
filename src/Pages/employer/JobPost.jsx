@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -24,10 +24,64 @@ const JobPost = () => {
     maxSalary: "",
     rounds: "",
     address: "",
-    city: ""
+    city: "",
+    deadline: "" // Added deadline field
   });
 
+  const [cities, setCities] = useState([]);
+  const [disabilityCategories, setDisabilityCategories] = useState([]);
+  const [jobTypes, setJobTypes] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/cities/all");
+        if (!response.ok) throw new Error("Failed to fetch cities");
+
+        const data = await response.json();
+        console.log("Fetched Cities:", data); // Debugging
+        setCities(data);
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    };
+    fetchCities();
+  }, []);
+
+  useEffect(() => {
+    const fetchDisabilityCategory = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/disablities-categories/all"
+        );
+        if (!response.ok)
+          throw new Error("Failed to fetch disability categories");
+
+        const data = await response.json();
+        console.log("Fetched disability categories:", data); // Debugging
+        setDisabilityCategories(data);
+      } catch (error) {
+        console.error("Error disability categories:", error);
+      }
+    };
+    fetchDisabilityCategory();
+  }, []);
+
+  useEffect(() => {
+    const fetchJobTypes = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/job-types/all");
+        if (!response.ok) throw new Error("Failed to fetch job types");
+
+        const data = await response.json();
+        setJobTypes(data);
+      } catch (error) {
+        console.error("Error fetching job types:", error);
+      }
+    };
+    fetchJobTypes();
+  }, []);
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -91,14 +145,19 @@ const JobPost = () => {
               <MenuItem value="" disabled>
                 Select Job Type
               </MenuItem>
-              <MenuItem value="Private">Private</MenuItem>
+              {jobTypes.length > 0 &&
+                jobTypes.map((type, index) =>
+                  <MenuItem key={index} value={type}>
+                    {type.replace(/_/g, " ")}
+                  </MenuItem>
+                )}
             </Select>
           </Grid>
           <Grid item xs={6}>
             <Select
               fullWidth
               name="category"
-              value={formData.category}
+              value={formData.category || ""}
               onChange={handleChange}
               displayEmpty
               variant="outlined"
@@ -107,11 +166,16 @@ const JobPost = () => {
               <MenuItem value="" disabled>
                 Select Disability Category
               </MenuItem>
-              <MenuItem value="Visual Impairment">Visual Impairment</MenuItem>
-              <MenuItem value="Hearing Impairment">Hearing Impairment</MenuItem>
-              <MenuItem value="Physical Disability">
-                Physical Disability
-              </MenuItem>
+              {disabilityCategories.length > 0 &&
+                disabilityCategories.map(disabilityCat =>
+                  <MenuItem
+                    key={disabilityCat.disabilityCatId}
+                    value={disabilityCat.disabilityCatName}
+                    sx={{ color: "black" }}
+                  >
+                    {disabilityCat.disabilityCatName}
+                  </MenuItem>
+                )}
             </Select>
           </Grid>
           <Grid item xs={12}>
@@ -189,23 +253,42 @@ const JobPost = () => {
               sx={{ mb: 2 }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <Select
               fullWidth
               name="city"
-              value={formData.city}
+              value={formData.city || ""}
               onChange={handleChange}
               displayEmpty
               variant="outlined"
               sx={{ mb: 2 }}
             >
-              <MenuItem value="" disabled>
+              <MenuItem value="" disabled sx={{ color: "black" }}>
                 Select City
               </MenuItem>
-              <MenuItem value="New York">New York</MenuItem>
-              <MenuItem value="Los Angeles">Los Angeles</MenuItem>
-              <MenuItem value="Chicago">Chicago</MenuItem>
+              {cities.length > 0 &&
+                cities.map(city =>
+                  <MenuItem
+                    key={city.cityId}
+                    value={city.cityName}
+                    sx={{ color: "black" }}
+                  >
+                    {city.cityName}
+                  </MenuItem>
+                )}
             </Select>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              label="Application Deadline"
+              name="deadline"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              onChange={handleChange}
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
           </Grid>
           <Grid
             item
