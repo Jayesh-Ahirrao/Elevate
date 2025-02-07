@@ -26,6 +26,7 @@ const AppRoutes = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path="/*" element={<Navigate to="/login" />} />
       </Routes>
     );
