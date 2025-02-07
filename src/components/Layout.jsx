@@ -42,21 +42,36 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
-
+  
     if (storedUser) {
-      const { token, employer } = JSON.parse(storedUser);
-      if (token && employer) {
-        setUser(employer);
-        setIsLoggedIn(true);
-      } else {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        console.log("Parsed Stored User:", parsedUser);
+  
+        const { token, userData } = parsedUser; // Fix: Extract userData instead of employer
+  
+        console.log("Stored Token:", token);
+        console.log("Stored User Data:", userData);
+  
+        if (token && userData) {
+          setUser(userData);
+          setIsLoggedIn(true);
+        } else {
+          alert("Invalid user data in localStorage");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error parsing stored user data:", error);
+        alert("Error reading user data. Please login again.");
         navigate("/login");
       }
     } else {
+      alert("No user data found in localStorage");
       navigate("/login");
     }
     setLoading(false);
   }, [navigate, setUser, setIsLoggedIn]);
-
+  
   const handleLogout = () => {
     localStorage.removeItem("userData");
     setUser(null);

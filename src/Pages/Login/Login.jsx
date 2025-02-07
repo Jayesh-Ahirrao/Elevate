@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../Login/Login.module.css";
 import config from "../../Config";
 import { UserContext } from "../../App";
-import { User } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,59 +10,51 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  
   const { setUser, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setError("");
     setLoading(true);
-  
+
     if (!email || !password) {
       setError("Please fill in all fields");
       setLoading(false);
       return;
     }
-  
+
     try {
       const response = await fetch(`${config.url.home}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password })
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`${errorText}`);
+        throw new Error(errorText);
       }
-  
+
       const responseData = await response.json();
       console.log("API Response:", responseData);
-  
+
       const { token, jobSeeker, employer } = responseData;
-  
-      // Determine user role and data
-      let userData = null;
-  
-      if (jobSeeker) {
-        userData = jobSeeker;
-      } else if (employer) {
-        userData = employer;
-      }
-  
+
+      let userData = employer || jobSeeker; // Assign correct user object
+
       if (!token || !userData) {
         throw new Error("Missing token or user data in response");
       }
-  
-      localStorage.setItem("userData", JSON.stringify({ token, userData }));
 
-      console.log("hereeeeeeeeeeeeeee",userData.roleName);
-      
-      setUser(userData.roleName);
+      // Save user data in localStorage
+      localStorage.setItem("userData", JSON.stringify({ token, userData }));
+      localStorage.setItem("userRole", userData.roleName);
+      localStorage.setItem("isLoggedIn", "true");
+
+      setUser(userData);
       setIsLoggedIn(true);
-      
-  
+
       // Redirect based on role
       if (userData.roleName === "EMPLOYER") {
         navigate("/dashboard");
@@ -78,43 +69,46 @@ const Login = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className={styles.loginPageWrapper}>
-    <div className={styles.formContainer}>
-      <h2 className={styles.title}>Login</h2>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.inputGroup}>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className={styles.loginButton} disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      <p>
-        New here? <Link to="/register">Register</Link>
-      </p>
-      {error &&
-        <p className={styles.error}>
-          {error}
-        </p>}
-    </div>
+      <div className={styles.formContainer}>
+        <h2 className={styles.title}>Login</h2>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.inputGroup}>
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className={styles.loginButton}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+        <p>
+          New here? <Link to="/register">Register</Link>
+        </p>
+        {error &&
+          <p className={styles.error}>
+            {error}
+          </p>}
+      </div>
     </div>
   );
 };
