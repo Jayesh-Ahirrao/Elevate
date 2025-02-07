@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom"; // Import Link for navigation
 import styles from "../Login/Login.module.css";
 import config from "../../Config";
+import LoadingCircle from "../../components/LoadingCircle";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -108,7 +109,11 @@ const ForgotPassword = () => {
               />
             </div>
             <button onClick={handleSendOTP} className={styles.loginButton} disabled={loading}>
-              {loading ? "Sending..." : "Send OTP"}
+              {loading ?
+               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+                            <LoadingCircle />
+                </div>
+              : "Send OTP"}
             </button>
           </>
         ) : (
@@ -132,10 +137,17 @@ const ForgotPassword = () => {
               />
             </div>
             <button onClick={handleResetPassword} className={styles.loginButton} disabled={loading}>
-              {loading ? "Resetting..." : "Reset Password"}
+              {loading ? 
+               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+                            <LoadingCircle />
+              </div>
+              : "Reset Password"}
             </button>
             <button onClick={handleResendOTP} className={styles.loginButton} disabled={loading}>
-              {loading ? "Resending..." : "Resend OTP"}
+              {loading ?  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+                            <LoadingCircle />
+                          </div>
+                           : "Resend OTP"}
             </button>
           </>
         )}

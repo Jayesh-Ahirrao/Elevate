@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../Login/Login.module.css";
 import config from "../../Config";
 import { UserContext } from "../../App";
+import LoadingCircle from "../../components/LoadingCircle";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ const Login = () => {
   const { setUser, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -28,7 +29,7 @@ const Login = () => {
       const response = await fetch(`${config.url.home}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -40,7 +41,6 @@ const Login = () => {
       console.log("API Response:", responseData);
 
       const { token, jobSeeker, employer } = responseData;
-
       let userData = employer || jobSeeker; // Assign correct user object
 
       if (!token || !userData) {
@@ -80,7 +80,7 @@ const Login = () => {
             <input
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -89,28 +89,33 @@ const Login = () => {
             <input
               type="password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
           <button
             type="submit"
             className={styles.loginButton}
-            disabled={loading}        
+            disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? <LoadingCircle/> : "Login"}
           </button>
         </form>
+
+        {/* Show progress indicator below the button when loading */}
+        {loading && (
+          <div className={styles.loadingWrapper}>
+            <LoadingCircle/>
+          </div>
+        )}
+
         <p>
           New here? <Link to="/register">Register</Link>
         </p>
         <p>
           <Link to="/forgot-password">Forgot Password?</Link>
         </p>
-        {error &&
-          <p className={styles.error}>
-            {error}
-          </p>}
+        {error && <p className={styles.error}>{error}</p>}
       </div>
     </div>
   );
