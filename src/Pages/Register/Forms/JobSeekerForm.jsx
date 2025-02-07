@@ -15,44 +15,6 @@ import {
   ListItemText,
 } from "@mui/material";
 
-// Array of states
-const states = [
-  { id: 1, name: "California" },
-  { id: 2, name: "Texas" },
-  { id: 3, name: "Florida" },
-  { id: 4, name: "New York" },
-];
-
-const cityMap = {
-  1: {
-    cities: [
-      { id: 1, name: "Los Angeles" },
-      { id: 2, name: "San Francisco" },
-      { id: 3, name: "San Diego" },
-    ],
-  },
-  2: {
-    cities: [
-      { id: 4, name: "Houston" },
-      { id: 5, name: "Dallas" },
-      { id: 6, name: "Austin" },
-    ],
-  },
-  3: {
-    cities: [
-      { id: 7, name: "Miami" },
-      { id: 8, name: "Orlando" },
-      { id: 9, name: "Tampa" },
-    ],
-  },
-  4: {
-    cities: [
-      { id: 10, name: "New York City" },
-      { id: 11, name: "Buffalo" },
-      { id: 12, name: "Rochester" },
-    ],
-  },
-};
 
 const skillsetPool = [
   { id: 1, name: "JavaScript" },
@@ -103,12 +65,14 @@ const debounce = (func, wait) => {
   };
 };
 
-const dummyUDID = "MH7370419810000035";
+
 
 const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const [isUdidValid, setIsUdidValid] = useState(false);
   const [isUDIDTouched, setIsUDIDTouched] = useState(false);
   const [disabilityCategories, setDisabilityCategories] = useState([]);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
   const udidRef = useRef(null);
 
   useEffect(() => {
@@ -127,43 +91,59 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
     }
   }, [step]);
 
-  const validateUdid = (udid) => {
-    return true;
-    // const regex = /^[A-Z]{2}\d{12}$/;
-    // return regex.test(udid);
+  useEffect(() => {
+    fetch("http://localhost:8080/api/states")
+      .then((response) => response.json())
+      .then((data) => setStates(data))
+      .catch((error) => console.error("Error fetching states:", error));
+  }, []);
+
+  useEffect(() => {
+    if (formData.state) {
+      fetch(`http://localhost:8080/api/cities?stateId=${formData.state}`)
+        .then((response) => response.json())
+        .then((data) => setCities(data))
+        .catch((error) => console.error("Error fetching cities:", error));
+    } else {
+      setCities([]);
+    }
+  }, [formData.state]);
+
+  
+   // Function to validate UDID from the backend
+   const validateUdidFromServer = async (udid) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/validate-udid?udid=${udid}`
+      );
+      const isValid = await response.json();
+      setIsUdidValid(isValid);
+    } catch (error) {
+      console.error("Error validating UDID:", error);
+      setIsUdidValid(false);
+    }
   };
 
   const handleUDIDChange = (e) => {
     setIsUDIDTouched(true);
-    onUpdateForm("udid", e.target.value.toUpperCase());
-    debounceValidateUdid(e.target.value.toUpperCase());
+    const newUdid = e.target.value.toUpperCase();
+    onUpdateForm("udid", newUdid);
+    debounceValidateUdid(newUdid);
   };
 
   const debounceValidateUdid = debounce((udid) => {
-    if (validateUdid(udid)) {
-      
-      if (udid === dummyUDID) {
-        setIsUdidValid(true);
-      } else {
-        setIsUdidValid(false);
-        setIsUDIDTouched(true);
-      }
-    } else {
-      setIsUdidValid(false);
-      setIsUDIDTouched(true);
-    }
+    validateUdidFromServer(udid);
   }, 300);
 
   const getUdidHelperText = () => {
     if (isUdidValid) {
       return "UDID validated";
     } else if (isUDIDTouched) {
-      return validateUdid(formData.udid)
-        ? "Invalid UDID"
-        : "Invalid UDID format";
+      return "Invalid UDID";
     }
     return "";
   };
+
 
   const handleStateChange = (e) => {
     onUpdateForm("state", e.target.value);
@@ -176,21 +156,21 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
         return (
           <>
             <TextField
-              fullWidth
-              //add maxlen 12 for input
-              label="Enter UDID Number"
-              type="text"
-              value={formData.udid || ""}
-              onChange={handleUDIDChange}
-              margin="normal"
-              required
-              inputRef={udidRef}
-              error={!isUdidValid && formData.udid}
-              helperText={getUdidHelperText()}
-              FormHelperTextProps={{
-                style: { color: isUdidValid ? "green" : "red" },
-              }}
-            />
+            fullWidth
+            label="Enter UDID Number"
+            type="text"
+            value={formData.udid || ""}
+            onChange={handleUDIDChange}
+            margin="normal"
+            required
+            inputRef={udidRef}
+            error={!isUdidValid && isUDIDTouched}
+            helperText={getUdidHelperText()}
+            FormHelperTextProps={{
+              style: { color: isUdidValid ? "green" : "red" },
+            }}
+          />
+
 
             <FormControl fullWidth margin="normal">
               <InputLabel>Disability Categories</InputLabel>
@@ -323,19 +303,18 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
               margin="normal"
               required
             />
-            <Grid container spacing={2}>
+             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <FormControl fullWidth margin="normal">
                   <InputLabel>State</InputLabel>
                   <Select
-                    label="State"
                     value={formData.state || ""}
                     onChange={handleStateChange}
                     required
                   >
                     {states.map((state) => (
-                      <MenuItem key={state.id} value={state.id}>
-                        {state.name}
+                      <MenuItem key={state.stateId} value={state.stateId}>
+                        {state.stateName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -345,18 +324,16 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
                 <FormControl fullWidth margin="normal">
                   <InputLabel>City</InputLabel>
                   <Select
-                    label="City"
                     value={formData.city || ""}
                     onChange={(e) => onUpdateForm("city", e.target.value)}
                     required
                     disabled={!formData.state}
                   >
-                    {formData.state &&
-                      cityMap[formData.state].cities.map((city) => (
-                        <MenuItem key={city.id} value={city.id}>
-                          {city.name}
-                        </MenuItem>
-                      ))}
+                    {cities.map((city) => (
+                      <MenuItem key={city.cityId} value={city.cityId}>
+                        {city.cityName}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>

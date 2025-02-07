@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.png"; // import logo
+import logo from "../../../../public/logo.png";
 import "./Navbar.css";
 import { UserContext } from "../../../App";
 
 const Navbar = () => {
   const { user, isLoggedIn, setIsLoggedIn, setUser } = useContext(UserContext);
+  console.log("User value  ->>> "+user);
+  console.log("Login value  ->> "+isLoggedIn);
+  
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
@@ -15,7 +18,7 @@ const Navbar = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
-    localStorage.removeItem('userRole');
+    localStorage.removeItem('userData');
     navigate('/login');
   };
 

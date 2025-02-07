@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../App';
-import styles from './Landing.module.css';
+import styles from './Landing.css';
 
 const Landing = () => {
     const { user, isLoggedIn } = useContext(UserContext);
 
     return (
         <div className={styles.landingContainer}>
-            <h1>Welcome to Elevate</h1>
+            <h1 className={styles}>Welcome to Elevate</h1>
             {isLoggedIn ? (
                 <p>Hello, {user.fname}!</p>
             ) : (
