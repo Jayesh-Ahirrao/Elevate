@@ -9,6 +9,7 @@ import Applicants from "../Pages/employer/Applicants";
 import Meetings from "../Pages/employer/Meetings";
 import Settings from "../Pages/employer/Settings";
 import JobPost from "../Pages/employer/JobPost";
+import Analytics from "../Pages/admin/Analytics"; 
 import { UserContext } from "../App";
 
 const AppRoutes = () => {
@@ -18,34 +19,47 @@ const AppRoutes = () => {
   console.log("Logged-in Status:", isLoggedIn);
   console.log("User Role:", role);
 
+  if (!isLoggedIn) {
+    return (
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/*" element={<Navigate to="/login" />} />
+      </Routes>
+    );
+  }
+
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-
-      {isLoggedIn ? (
-        role === "EMPLOYER" ? (
-          <>
-            <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-            <Route path="/applicants" element={<Layout><Applicants /></Layout>} />
-            <Route path="/meetings" element={<Layout><Meetings /></Layout>} />
-            <Route path="/settings" element={<Layout><Settings /></Layout>} />
-            <Route path="/post-job" element={<Layout><JobPost /></Layout>} />
-            <Route path="/*" element={<Navigate to="/dashboard" />} />
-          </>
-        ) : role === "JOBSEEKER" ? (
-          <>
-            <Route path="/landing" element={<Layout><LandingPage /></Layout>} />
-            <Route path="/*" element={<Navigate to="/landing" />} />
-          </>
-        ) : (
-          <Route path="/*" element={<Navigate to="/login" />} />
-        )
-      ) : (
+      {role === "EMPLOYER" && (
         <>
-          <Route path="/*" element={<Navigate to="/login" />} />
+          <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+          <Route path="/applicants" element={<Layout><Applicants /></Layout>} />
+          <Route path="/meetings" element={<Layout><Meetings /></Layout>} />
+          <Route path="/settings" element={<Layout><Settings /></Layout>} />
+          <Route path="/post-job" element={<Layout><JobPost /></Layout>} />
+          <Route path="/*" element={<Navigate to="/dashboard" />} />
         </>
+      )}
+
+      {role === "JOBSEEKER" && (
+        <>
+          <Route path="/landing" element={<Layout><LandingPage /></Layout>} />
+          <Route path="/*" element={<Navigate to="/landing" />} />
+        </>
+      )}
+
+      {role === "ADMIN" && (
+        <>
+          <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
+          <Route path="/*" element={<Navigate to="/analytics" />} />
+        </>
+      )}
+
+      {/* Default redirect for unknown roles */}
+      {role !== "EMPLOYER" && role !== "JOBSEEKER" && role !== "ADMIN" && (
+        <Route path="/*" element={<Navigate to="/login" />} />
       )}
     </Routes>
   );

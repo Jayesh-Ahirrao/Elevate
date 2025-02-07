@@ -10,10 +10,11 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Use Context and Navigation
   const { setUser, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -25,10 +26,20 @@ const Login = () => {
     }
 
     try {
+      // Check for hardcoded admin credentials
+      if (email === "admin1@example.com" && password === "admin123") {
+        localStorage.setItem("userRole", "ADMIN");
+        setUser({ roleName: "ADMIN" });
+        setIsLoggedIn(true);
+        navigate("/admin-dashboard"); 
+        return;
+      }
+
+      // API Call for JobSeeker & Employer Login
       const response = await fetch(`${config.url.home}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -40,7 +51,6 @@ const Login = () => {
       console.log("API Response:", responseData);
 
       const { token, jobSeeker, employer } = responseData;
-
       let userData = employer || jobSeeker; // Assign correct user object
 
       if (!token || !userData) {
@@ -60,7 +70,10 @@ const Login = () => {
         navigate("/dashboard");
       } else if (userData.roleName === "JOBSEEKER") {
         navigate("/landing");
-      } else {
+      }else if(userData.roleName === "ADMIN"){
+        navigate("/analytics")
+      }
+      else {
         navigate("/");
       }
     } catch (error) {
@@ -80,7 +93,7 @@ const Login = () => {
             <input
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -89,25 +102,18 @@ const Login = () => {
             <input
               type="password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button
-            type="submit"
-            className={styles.loginButton}
-            disabled={loading}
-          >
+          <button type="submit" className={styles.loginButton} disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
         <p>
           New here? <Link to="/register">Register</Link>
         </p>
-        {error &&
-          <p className={styles.error}>
-            {error}
-          </p>}
+        {error && <p className={styles.error}>{error}</p>}
       </div>
     </div>
   );
