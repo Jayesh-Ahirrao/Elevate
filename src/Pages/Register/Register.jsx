@@ -18,12 +18,13 @@ import { useNavigate } from "react-router-dom";
 function Register() {
   const { setUser, setIsLoggedIn } = useContext(UserContext);
   const [state, setState] = useState(INITIAL_STATE);
+  const [successMessage, setSuccessMessage] = useState(""); // Added state for success message
   const navigate = useNavigate();
 
   const handleRoleSelect = role => {
     setState(prev => ({
       ...prev,
-      role,
+      role, 
       currentStep: STEPS.BASIC_INFO
     }));
   };
@@ -87,7 +88,7 @@ function Register() {
       const { confirmPassword, ...filteredFormData } = formData;
 
       const response = await axios.post(config.url.register, {
-        roleName: "EMPLOYER", // Using role as EMPLOYER for employer form data
+        roleName: "EMPLOYER",
         ...filteredFormData
       });
 
@@ -115,15 +116,10 @@ function Register() {
     try {
       let responseData;
 
-      // Conditionally call the appropriate form submission function based on role
       if (state.role === config.roles.employer) {
-        responseData = await submitEmployerForm(
-          state.formData.employerFormData
-        );
+        responseData = await submitEmployerForm(state.formData.employerFormData);
       } else if (state.role === config.roles.jobseeker) {
-        responseData = await submitJobseekerForm(
-          state.formData.jobseekerFormData
-        );
+        responseData = await submitJobseekerForm(state.formData.jobseekerFormData);
       } else {
         throw new Error("Invalid role");
       }
@@ -136,12 +132,14 @@ function Register() {
       setUser({ ...responseData, fname: username });
       setIsLoggedIn(true);
 
-      // Ensure 'isEmployer' is correctly passed as state to the LandingPage
-      navigate("/", {
-        state: { isEmployer: state.role === config.roles.employer }
-      });
+      setSuccessMessage("Registration successful! A welcome email has been sent to your email address."); // Display success message
 
-      console.log("Registration successful:", responseData);
+      // Redirect to dashboard after short delay
+      setTimeout(() => {
+        navigate("/", {
+          state: { isEmployer: state.role === config.roles.employer }
+        });
+      }, 3000);
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Failed to register. Please try again.");
@@ -173,34 +171,45 @@ function Register() {
             </Typography>
           </div>
 
-          <StepIndicator currentStep={state.currentStep} role={state.role} />
+          {successMessage ? (
+            <Typography variant="h6" color="primary" align="center">
+              {successMessage}
+            </Typography>
+          ) : (
+            <>
+              <StepIndicator currentStep={state.currentStep} role={state.role} />
 
-          <div className={styles.formStep}>
-            {state.currentStep === STEPS.ROLE_SELECTION
-              ? <RoleSelection
-                  selectedRole={state.role}
-                  onRoleSelect={handleRoleSelect}
-                />
-              : state.role === config.roles.jobseeker
-                ? <JobSeekerForm
+              <div className={styles.formStep}>
+                {state.currentStep === STEPS.ROLE_SELECTION ? (
+                  <RoleSelection
+                    selectedRole={state.role}
+                    onRoleSelect={handleRoleSelect}
+                  />
+                ) : state.role === config.roles.jobseeker ? (
+                  <JobSeekerForm
                     formData={state.formData.jobseekerFormData}
                     onUpdateForm={handleUpdateJobseekerForm}
                     step={state.currentStep}
                   />
-                : <EmployerForm
+                ) : (
+                  <EmployerForm
                     formData={state.formData.employerFormData}
                     onUpdateForm={handleUpdateEmployerForm}
                     step={state.currentStep}
-                  />}
-          </div>
+                  />
+                )}
+              </div>
 
-          {state.currentStep != STEPS.ROLE_SELECTION &&
-            <NavigationButtons
-              currentStep={state.currentStep}
-              isLastStep={state.currentStep === STEPS.FINAL_STEPS}
-              onBack={handleBack}
-              onNext={handleNext}
-            />}
+              {state.currentStep !== STEPS.ROLE_SELECTION && (
+                <NavigationButtons
+                  currentStep={state.currentStep}
+                  isLastStep={state.currentStep === STEPS.FINAL_STEPS}
+                  onBack={handleBack}
+                  onNext={handleNext}
+                />
+              )}
+            </>
+          )}
         </Paper>
       </Container>
     </div>
