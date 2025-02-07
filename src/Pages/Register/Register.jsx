@@ -14,11 +14,13 @@ import { validateForm } from "../../Config/formValidation";
 import { INITIAL_STATE, STEPS } from "../../Config/constants";
 import config from "../../Config";
 import { useNavigate } from "react-router-dom";
+import LoadingCircle from "../../components/LoadingCircle"; // Import LoadingCircle component
 
 function Register() {
   const { setUser, setIsLoggedIn } = useContext(UserContext);
   const [state, setState] = useState(INITIAL_STATE);
   const [successMessage, setSuccessMessage] = useState(""); // Added state for success message
+  const [isLoading, setIsLoading] = useState(false); // Added state for loading indicator
   const navigate = useNavigate();
 
   const handleRoleSelect = role => {
@@ -114,6 +116,7 @@ function Register() {
 
   const handleSubmit = async state => {
     try {
+      setIsLoading(true); // Set loading to true
       let responseData;
 
       if (state.role === config.roles.employer) {
@@ -143,6 +146,8 @@ function Register() {
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Failed to register. Please try again.");
+    } finally {
+      setIsLoading(false); // Set loading to false
     }
   };
 
@@ -171,7 +176,11 @@ function Register() {
             </Typography>
           </div>
 
-          {successMessage ? (
+          {isLoading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', padding: '0.5rem'}}>
+              <LoadingCircle />
+            </div>
+          ) : successMessage ? (
             <Typography variant="h6" color="primary" align="center">
               {successMessage}
             </Typography>
