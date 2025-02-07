@@ -11,6 +11,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Use Context and Navigation
   const { setUser, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -38,31 +39,36 @@ const Login = () => {
       }
 
       const responseData = await response.json();
+
       console.log("API Response:", responseData);
 
-      const { token, jobSeeker, employer } = responseData;
-      let userData = employer || jobSeeker; // Assign correct user object
+      const { token, jobSeeker, employer, admin } = responseData;
 
+      let userData = admin || employer || jobSeeker;
+      
       if (!token || !userData) {
-        throw new Error("Missing token or user data in response");
+          throw new Error("Missing token or user data in response");
       }
-
+      
+      
       // Save user data in localStorage
       localStorage.setItem("userData", JSON.stringify({ token, userData }));
       localStorage.setItem("userRole", userData.roleName);
       localStorage.setItem("isLoggedIn", "true");
-
+      
       setUser(userData);
       setIsLoggedIn(true);
-
+      
       // Redirect based on role
-      if (userData.roleName === "EMPLOYER") {
-        navigate("/dashboard");
+      if (userData.roleName === "ADMIN") {
+          navigate("/analytics");
+      } else if (userData.roleName === "EMPLOYER") {
+          navigate("/dashboard");
       } else if (userData.roleName === "JOBSEEKER") {
-        navigate("/landing");
+          navigate("/landing");
       } else {
-        navigate("/");
-      }
+          navigate("/");
+      }      
     } catch (error) {
       setError(error.message || "Login failed. Try again.");
     } finally {

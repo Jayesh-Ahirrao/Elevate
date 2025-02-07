@@ -74,6 +74,8 @@ export default function Layout({ children }) {
   
   const handleLogout = () => {
     localStorage.removeItem("userData");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userRole");
     setUser(null);
     setIsLoggedIn(false);
     navigate("/login");
