@@ -51,7 +51,7 @@ export default function Dashboard() {
         <Grid item xs={12} sm={4}>
           <Card
             sx={{
-              background: "linear-gradient(135deg, #38BFF0, #007bb2)",
+              background: "#0d98ba",
               color: "white",
               borderRadius: "12px",
               boxShadow: 3
@@ -66,7 +66,7 @@ export default function Dashboard() {
         <Grid item xs={12} sm={4}>
           <Card
             sx={{
-              background: "linear-gradient(135deg, #4CAF50, #2E7D32)",
+              background: "#0d98ba",
               color: "white",
               borderRadius: "12px",
               boxShadow: 3
@@ -81,7 +81,7 @@ export default function Dashboard() {
         <Grid item xs={12} sm={4}>
           <Card
             sx={{
-              background: "linear-gradient(135deg, #FF9800, #F57C00)",
+              background: "#0d98ba",
               color: "white",
               borderRadius: "12px",
               boxShadow: 3
@@ -106,7 +106,7 @@ export default function Dashboard() {
         }}  
       >
         {/* Left side: Job Status and Search */}
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2 , }}>
           <FormControl sx={{ minWidth: 120 }}>
             <InputLabel>Job Status</InputLabel>
             <Select
@@ -143,7 +143,7 @@ export default function Dashboard() {
             value={sortOrder}
             label="Sort By"
             onChange={e => setSortOrder(e.target.value)}
-            sx={{ height: "40px" }} // Set height for consistency
+            sx={{ height: "40px", borderRadius :"15px" }} // Set height for consistency
           >
             <MenuItem value="newest">Newest</MenuItem>
             <MenuItem value="oldest">Oldest</MenuItem>
@@ -157,7 +157,7 @@ export default function Dashboard() {
       >
         <Table>
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#1976d2", color: "white" }}>
+            <TableRow sx={{ backgroundColor: "#11ACE4", color: "white" }}>
               <TableCell sx={{ color: "white" }}>Title</TableCell>
               <TableCell sx={{ color: "white" }}>Applicants</TableCell>
               <TableCell sx={{ color: "white" }}>Status</TableCell>

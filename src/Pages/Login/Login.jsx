@@ -115,10 +115,10 @@ const Login = () => {
           </div>
         )}
 
-        <p>
+        <p className="registrationLink">
           New here? <Link to="/register">Register</Link>
         </p>
-        <p>
+        <p className="forgotPassword">
           <Link to="/forgot-password">Forgot Password?</Link>
         </p>
         {error && <p className={styles.error}>{error}</p>}

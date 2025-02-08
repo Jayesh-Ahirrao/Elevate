@@ -99,14 +99,15 @@ const JobPost = () => {
         margin: "auto",
         mt: 5,
         p: 3,
-        border: "1px solid #1976d2",
+        background : "transparent",
+        // border: "1px solidrgb(255, 255, 255)",
         borderRadius: "8px",
-        backgroundColor: "#f5f5f5",
-        boxShadow: 3
+        backgroundColor: "white",
+        // boxShadow: 3
       }}
     >
       <CardContent>
-        <Typography variant="h5" gutterBottom sx={{ color: "#1976d2" }}>
+        <Typography variant="h5" gutterBottom sx={{ color: "#1976d2" , marginBottom : "2rem", fontWeight: "bold"}}>
           Post a Job
         </Typography>
         <Grid container spacing={2}>
@@ -297,11 +298,11 @@ const JobPost = () => {
           >
             <Button
               variant="outlined"
-              color="secondary"
+              color="#38b0ff"
               onClick={() => navigate("/dashboard")}
               sx={{
                 borderRadius: "8px",
-                "&:hover": { bgcolor: "#FFEBEE" }
+                "&:hover": { bgcolor: "#38b0ff" }
               }}
             >
               Cancel
@@ -312,8 +313,8 @@ const JobPost = () => {
               onClick={handleSubmit}
               sx={{
                 borderRadius: "8px",
-                bgcolor: "#4CAF50",
-                "&:hover": { bgcolor: "#2E7D32" },
+                bgcolor: "#38b0ff",
+                "&:hover": { bgcolor: "white", border: "2px solid #38b0ff", color : "#38b0ff" },
                 color: "white"
               }}
             >
