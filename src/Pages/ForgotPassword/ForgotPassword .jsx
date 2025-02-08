@@ -76,13 +76,17 @@ const ForgotPassword = () => {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Failed to reset password");
+      if (!response.ok)
+        throw new Error(data.message || "Failed to reset password");
 
       // Success message with clickable login link
       setMessage(
         <span>
           Password reset successfully! You can now{" "}
-          <Link to="/login" className={styles.link}>log in</Link>.
+          <Link to="/login" className={styles.link}>
+            log in
+          </Link>
+          .
         </span>
       );
     } catch (err) {
@@ -96,7 +100,7 @@ const ForgotPassword = () => {
     <div className={styles.loginPageWrapper}>
       <div className={styles.formContainer}>
         <h2 className={styles.title}>Forgot Password</h2>
-        
+
         {!otpSent ? (
           <>
             <div className={styles.inputGroup}>
@@ -108,12 +112,25 @@ const ForgotPassword = () => {
                 required
               />
             </div>
-            <button onClick={handleSendOTP} className={styles.loginButton} disabled={loading}>
-              {loading ?
-               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-                            <LoadingCircle />
+            <button
+              onClick={handleSendOTP}
+              className={styles.loginButton}
+              disabled={loading}
+            >
+              {loading ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
+                >
+                  <LoadingCircle />
                 </div>
-              : "Send OTP"}
+              ) : (
+                "Send OTP"
+              )}
             </button>
           </>
         ) : (
@@ -136,25 +153,62 @@ const ForgotPassword = () => {
                 required
               />
             </div>
-            <button onClick={handleResetPassword} className={styles.loginButton} disabled={loading}>
-              {loading ? 
-               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-                            <LoadingCircle />
-              </div>
-              : "Reset Password"}
+            <button
+              onClick={handleResetPassword}
+              className={styles.loginButton}
+              disabled={loading}
+              style={{
+                marginBottom : "1rem",
+              }}
+            >
+              {loading ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    
+                  }}
+                >
+                  <LoadingCircle />
+                </div>
+              ) : (
+                "Reset Password"
+              )}
             </button>
-            <button onClick={handleResendOTP} className={styles.loginButton} disabled={loading}>
-              {loading ?  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-                            <LoadingCircle />
-                          </div>
-                           : "Resend OTP"}
+            <button
+              onClick={handleResendOTP}
+              className={styles.loginButton}
+              disabled={loading}
+            >
+              {loading ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
+                >
+                  <LoadingCircle />
+                </div>
+              ) : (
+                "Resend OTP"
+              )}
             </button>
           </>
         )}
-
+        <div
+        style={{
+          marginTop : "1rem"
+        }}
+        >
         {message && <p className={styles.success}>{message}</p>}
         {error && <p className={styles.error}>{error}</p>}
+        </div>
       </div>
+
     </div>
   );
 };
