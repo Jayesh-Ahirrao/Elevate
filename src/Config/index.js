@@ -1,7 +1,7 @@
 // export a config object for cofigured api end point as localhost as of now
 
-const baseURL = "http://localhost:8081";
-const authURL = "http://localhost:8081/api/auth";
+const baseURL = "http://localhost:8080";
+const authURL = "http://localhost:8080/api/auth";
 
 const config = {
   url: {

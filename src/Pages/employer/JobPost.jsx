@@ -59,7 +59,7 @@ const JobPost = () => {
           throw new Error("Failed to fetch disability categories");
 
         const data = await response.json();
-        console.log("Fetched disability categories:", data); // Debugging
+        console.log("Fetched disability categories:", data);
         setDisabilityCategories(data);
       } catch (error) {
         console.error("Error disability categories:", error);

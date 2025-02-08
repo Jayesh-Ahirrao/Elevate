@@ -102,12 +102,17 @@ function Register() {
 
   const submitJobseekerForm = async formData => {
     try {
-      const { confirmPassword, ...filteredFormData } = formData;
-
+      // Destructure and rename fields to match backend expectations
+      const { confirmPassword, udid, city,addressline,  ...rest } = formData;
+  
       const response = await axios.post(config.url.registerJobseekerTemp, {
         roleName: "JOBSEEKER",
-        ...filteredFormData
+        udId: udid, // Map 'udid' to 'udId'
+        cityId: city, // Map 'city' to 'cityId'
+        detailedAddress : addressline,
+        ...rest
       });
+      console.log("Jobseeker form submitted:", response.data); // Debugging
       return response.data;
     } catch (error) {
       throw new Error(`Error submitting jobseeker form: ${error.message}`);

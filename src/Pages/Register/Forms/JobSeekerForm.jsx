@@ -12,9 +12,8 @@ import {
   Input,
   Grid,
   Checkbox,
-  ListItemText,
+  ListItemText
 } from "@mui/material";
-
 
 const skillsetPool = [
   { id: 1, name: "JavaScript" },
@@ -46,14 +45,14 @@ const skillsetPool = [
   { id: 27, name: "Flask" },
   { id: 28, name: "Django" },
   { id: 29, name: "Unity" },
-  { id: 30, name: "Unreal Engine" },
+  { id: 30, name: "Unreal Engine" }
 ];
 
 const educationLevels = [
   { id: 1, label: "Diploma" },
   { id: 2, label: "Bachelors" },
   { id: 3, label: "Masters" },
-  { id: 4, label: "Doctorate" },
+  { id: 4, label: "Doctorate" }
 ];
 
 // Custom debounce function
@@ -65,8 +64,6 @@ const debounce = (func, wait) => {
   };
 };
 
-
-
 const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const [isUdidValid, setIsUdidValid] = useState(false);
   const [isUDIDTouched, setIsUDIDTouched] = useState(false);
@@ -75,15 +72,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const [cities, setCities] = useState([]);
   const udidRef = useRef(null);
 
-  useEffect(() => {
-    // Fetch disability categories on page load
-    fetch("/api/disability-categories")
-      .then((response) => response.json())
-      .then((data) => setDisabilityCategories(data))
-      .catch((error) =>
-        console.error("Error fetching disability categories:", error)
-      );
-  }, []);
+  
 
   useEffect(() => {
     if (step === 1 && udidRef.current) {
@@ -109,14 +98,32 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
     }
   }, [formData.state]);
 
-  
-   // Function to validate UDID from the backend
-   const validateUdidFromServer = async (udid) => {
+  useEffect(() => {
+    const fetchDisabilityCategory = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/disablities-categories/all"
+        );
+        if (!response.ok)
+          throw new Error("Failed to fetch disability categories");
+
+        const data = await response.json();
+        console.log("Fetched disability categories:", data);
+        setDisabilityCategories(data);
+      } catch (error) {
+        console.error("Error disability categories:", error);
+      }
+    };
+    fetchDisabilityCategory();
+  }, []);
+  // Function to validate UDID from the backend
+  const validateUdidFromServer = async (udid) => {
     try {
       const response = await fetch(
         `http://localhost:8080/api/validate-udid?udid=${udid}`
       );
       const isValid = await response.json();
+      
       setIsUdidValid(isValid);
     } catch (error) {
       console.error("Error validating UDID:", error);
@@ -144,7 +151,6 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
     return "";
   };
 
-
   const handleStateChange = (e) => {
     onUpdateForm("state", e.target.value);
     onUpdateForm("city", ""); // Reset city when state changes
@@ -156,26 +162,24 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
         return (
           <>
             <TextField
-            fullWidth
-            label="Enter UDID Number"
-            type="text"
-            value={formData.udid || ""}
-            onChange={handleUDIDChange}
-            margin="normal"
-            required
-            inputRef={udidRef}
-            error={!isUdidValid && isUDIDTouched}
-            helperText={getUdidHelperText()}
-            FormHelperTextProps={{
-              style: { color: isUdidValid ? "green" : "red" },
-            }}
-          />
+              fullWidth
+              label="Enter UDID Number"
+              type="text"
+              value={formData.udid || ""}
+              onChange={handleUDIDChange}
+              margin="normal"
+              required
+              inputRef={udidRef}
+              error={!isUdidValid && isUDIDTouched}
+              helperText={getUdidHelperText()}
+              FormHelperTextProps={{
+                style: { color: isUdidValid ? "green" : "red" }
+              }}
+            />
 
-
-            <FormControl fullWidth margin="normal">
+            <FormControl fullWidth margin="normal" disabled={!isUdidValid}>
               <InputLabel>Disability Categories</InputLabel>
               <Select
-                disabled={!isUdidValid}
                 multiple
                 value={formData.disabilityCategories || []}
                 onChange={(e) =>
@@ -184,8 +188,8 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
                 input={<Input />}
               >
                 {disabilityCategories.map((category) => (
-                  <MenuItem key={category.id} value={category.name}>
-                    {category.name}
+                  <MenuItem key={category.disabilityCatId} value={category.disabilityCatName}>
+                    {category.disabilityCatName}
                   </MenuItem>
                 ))}
               </Select>
@@ -291,7 +295,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
                       required
                     />
                   }
-                />
+                />  
               </Grid>
             </Grid>
             <TextField
@@ -303,7 +307,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
               margin="normal"
               required
             />
-             <Grid container spacing={2}>
+            <Grid container spacing={2}>
               <Grid item xs={6}>
                 <FormControl fullWidth margin="normal">
                   <InputLabel>State</InputLabel>
