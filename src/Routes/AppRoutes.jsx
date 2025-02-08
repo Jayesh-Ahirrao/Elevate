@@ -12,6 +12,9 @@ import JobPost from "../Pages/employer/JobPost";
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword ";
 import Analytics from "../Pages/admin/Analytics"; 
 import { UserContext } from "../App";
+import AdminDLayout from "../components/AdminDLayout";
+import Employers from "../Pages/admin/Employer";
+import JobSeekers from "../Pages/admin/JobSeekers";
 
 const AppRoutes = () => {
   const { user, isLoggedIn } = useContext(UserContext);
@@ -47,14 +50,16 @@ const AppRoutes = () => {
 
       {role === "JOBSEEKER" && (
         <>
-          <Route path="/landing" element={<Layout><LandingPage /></Layout>} />
+          <Route path="/landing" element={<LandingPage />} />
           <Route path="/*" element={<Navigate to="/landing" />} />
         </>
       )}
 
       {role === "ADMIN" && (
         <>
-          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/analytics" element={<AdminDLayout><Analytics/></AdminDLayout>} />
+          <Route path="/employers" element={<AdminDLayout><Employers/></AdminDLayout>} />
+          <Route path="/jobseekers" element={<AdminDLayout><JobSeekers/></AdminDLayout>} />
           <Route path="/*" element={<Navigate to="/analytics" />} />
         </>
       )}

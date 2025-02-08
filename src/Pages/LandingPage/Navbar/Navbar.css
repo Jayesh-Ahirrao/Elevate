@@ -27,9 +27,10 @@
 }
 
 .username{
+  /* padding: 1rem 0.5rem; */
   color: #38BFF0;
   font-weight: bold;
-  font-size: larger;
+  font-size: large;
 }
 
 
@@ -46,6 +47,7 @@
 }
 
 .nav-buttons {
+  /* padding: 0.5rem; */
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -70,6 +72,7 @@
   text-align: center;
   color: #38BFF0;
   transition: all 0.5s ease;
+  border-radius: 20px;
   cursor: pointer;
 }
 

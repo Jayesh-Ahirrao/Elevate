@@ -1,6 +1,7 @@
 // export a config object for cofigured api end point as localhost as of now
 
 const baseURL = "http://localhost:8081";
+const dotnetURL = "https://localhost:7038/Admin";
 const authURL = "http://localhost:8081/api/auth";
 
 const config = {
@@ -14,6 +15,14 @@ const config = {
     forgotPassword: `${authURL}/forgot-password`, // Updated Endpoint
     resendOtp: `${authURL}/resend-otp`, // New Resend OTP Endpoint
     resetPassword: `${authURL}/reset-password`
+  },
+  doturl :{
+    totalEmployers : `${dotnetURL}/totalEmployers`,
+    totalJobSeekers : `${dotnetURL}/totalJobSeekers`,
+    activeJobs : `${dotnetURL}/activeJobs`,
+    allEmployers : `${dotnetURL}/allEmployers`,
+    allJobSeekers : `${dotnetURL}/allJobSeekers`,
+    topCity : `${dotnetURL}/cityMaxJobs`
   },
   roles: {
     jobseeker: "jobseeker",

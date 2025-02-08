@@ -101,7 +101,7 @@ export default function Applicants() {
       >
         <Table>
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#1976d2" }}>
+            <TableRow sx={{ backgroundColor: "#38BFF0" }}>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
                 Name
               </TableCell>

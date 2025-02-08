@@ -67,17 +67,19 @@
   }
   
   .btn-primary:hover {
-    background: #2eaee0;
+    background: transparent;
+    border: 2px solid #38BFF0;
   }
   
   .btn-secondary {
     background: white;
     color: #38BFF0;
-    border: 2px solid #38BFF0;
+    border: 2px solid white;
   }
   
   .btn-secondary:hover {
     background: rgba(56, 191, 240, 0.05);
+
   }
   
   .featured-jobs {
@@ -134,6 +136,13 @@
     color: #38BFF0;
     margin-bottom: 1rem;
     font-weight: 600;
+  }
+
+  .elevate-text {
+    color: #38bff0;
+    letter-spacing: -2px; /* Adjust as needed */
+    font-family: "League Spartan", sans-serif;
+    font-weight: bold;
   }
   
   .info-card p {

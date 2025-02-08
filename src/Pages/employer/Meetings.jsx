@@ -52,7 +52,7 @@ export default function Meetings() {
       >
         <Table>
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#1976d2", color: "white" }}>
+            <TableRow sx={{ backgroundColor: "#38BFF0", color: "white" }}>
               <TableCell sx={{ color: "white" }}>Candidate</TableCell>
               <TableCell sx={{ color: "white" }}>Position</TableCell>
               <TableCell sx={{ color: "white" }}>Date & Time</TableCell>

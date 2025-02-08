@@ -201,7 +201,7 @@ export default function Settings() {
         <Button
           onClick={handleProfileUpdate}
           variant="contained"
-          sx={{ mt: 2, bgcolor: "#0288d1", "&:hover": { bgcolor: "#01579b" } }}
+          sx={{ mt: 2, bgcolor: "#38BFF0", "&:hover": { bgcolor: "#01579b" } }}
         >
           Update Profile
         </Button>
@@ -267,8 +267,8 @@ export default function Settings() {
             variant="contained"
             fullWidth
             sx={{
-              bgcolor: "#4CAF50",
-              "&:hover": { bgcolor: "#2E7D32" },
+              bgcolor: "#38BFF0",
+              "&:hover": { bgcolor: "#01579b" },
               color: "white"
             }}
           >

@@ -2,9 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
-  Drawer,
   AppBar,
   Toolbar,
+  Drawer,
   List,
   Typography,
   Divider,
@@ -13,67 +13,50 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Button,
-  Menu,
-  MenuItem,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
-
 import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
-  Event as EventIcon,
-  Settings as SettingsIcon,
+  Business as BusinessIcon,
   Logout as LogoutIcon,
   Menu as MenuIcon,
-  AccountCircle as AccountCircleIcon
 } from "@mui/icons-material";
-
 import { UserContext } from "../App";
 import logo from "../../public/logo.png";
 
 const drawerWidth = 240;
 
-export default function Layout({ children }) {
+export default function AdminDLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
   const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState("N/A");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
-  
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        console.log("Parsed Stored User:", parsedUser);
-  
-        const { token, userData } = parsedUser; // Fix: Extract userData instead of employer
-  
-        console.log("Stored Token:", token);
-        console.log("Stored User Data:", userData);
-  
+        const { token, userData } = parsedUser;
         if (token && userData) {
           setUser(userData);
           setIsLoggedIn(true);
+          setUserName(parsedUser.fname);
         } else {
-          alert("Invalid user data in localStorage");
           navigate("/login");
         }
       } catch (error) {
-        console.error("Error parsing stored user data:", error);
-        alert("Error reading user data. Please login again.");
         navigate("/login");
       }
     } else {
-      alert("No user data found in localStorage");
       navigate("/login");
     }
     setLoading(false);
   }, [navigate, setUser, setIsLoggedIn]);
-  
+
   const handleLogout = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("isLoggedIn");
@@ -84,17 +67,9 @@ export default function Layout({ children }) {
   };
 
   const menuItems = [
-    { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-    { text: "Applicants", icon: <PeopleIcon />, path: "/applicants" },
-    { text: "Meetings", icon: <EventIcon />, path: "/meetings" },
-    { text: "Settings", icon: <SettingsIcon />, path: "/settings" }
-  ];
-
-  const userMenuItems = [
-    { text: "Dashboard", path: "/dashboard" },
-    { text: "Applicants", path: "/applicants" },
-    { text: "Meetings", path: "/meetings" },
-    { text: "Settings", path: "/settings" }
+    { text: "Analytics", icon: <DashboardIcon />, path: "/analytics" },
+    { text: "Job Seekers", icon: <PeopleIcon />, path: "/jobseekers" },
+    { text: "Employers", icon: <BusinessIcon />, path: "/employers" },
   ];
 
   const drawer = (
@@ -125,7 +100,7 @@ export default function Layout({ children }) {
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText primary="Logout" />
+            <ListItemText primary="Logout" style={{ color: "#556EAA" }} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -139,7 +114,7 @@ export default function Layout({ children }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh"
+          height: "100vh",
         }}
       >
         <CircularProgress />
@@ -155,7 +130,7 @@ export default function Layout({ children }) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           bgcolor: "white",
-          color: "black"
+          color: "black",
         }}
       >
         <Toolbar>
@@ -167,58 +142,19 @@ export default function Layout({ children }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             {menuItems.find((item) => item.path === location.pathname)?.text}
           </Typography>
-          <Box
-            sx={{ display: "flex", alignItems: "center", ml: "auto", gap: 2 }}
-          >
-            {user ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer"
-                }}
-                onMouseEnter={(e) => setAnchorEl(e.currentTarget)}
-                onMouseLeave={() => setAnchorEl(null)}
-              >
-                <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-                  <AccountCircleIcon sx={{ fontSize: 32, color: "#1976d2" }} />
-                </IconButton>
-                <Typography
-                  variant="h6"
-                  sx={{ ml: 1, fontWeight: "bold", color: "#1976d2" }}
-                >
-                  {user.fname} {user.lname}
-                </Typography>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={() => setAnchorEl(null)}
-                  PaperProps={{ sx: { maxWidth: 180, mt: 1.5 } }}
-                >
-                  {userMenuItems.map((item) => (
-                    <MenuItem
-                      key={item.text}
-                      onClick={() => navigate(item.path)}
-                    >
-                      {item.text}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            ) : null}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate("/post-job")}
-            >
-              Post Job
-            </Button>
-          </Box>
+
+          {/* User Name Section */}
+          {user && (
+            <Typography variant="subtitle1" sx={{ fontWeight: "bold", mr: 2 }}>
+              {userName}
+            </Typography>
+          )}
         </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -232,8 +168,8 @@ export default function Layout({ children }) {
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: drawerWidth
-            }
+              width: drawerWidth,
+            },
           }}
         >
           {drawer}
@@ -244,8 +180,8 @@ export default function Layout({ children }) {
             display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: drawerWidth
-            }
+              width: drawerWidth,
+            },
           }}
           open
         >
@@ -257,11 +193,11 @@ export default function Layout({ children }) {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` }, // Ensures content fits within available space
-          ml: { sm: `${drawerWidth}px` }, // Prevents overlapping with sidebar
-          pt: "80px", // Adds padding instead of margin
-          maxWidth: "1200px", // Restricts max width for all pages
-          margin: "auto" // Centers the content
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          pt: "80px",
+          maxWidth: "1200px",
+          margin: "auto",
         }}
       >
         {children}

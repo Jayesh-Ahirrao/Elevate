@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../../public/logo.png";
+import { User } from "lucide-react";
 import "./Navbar.css";
 import { UserContext } from "../../../App";
 
@@ -22,9 +23,9 @@ const Navbar = () => {
     navigate('/login');
   };
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-  };
+  // const capitalizeFirstLetter = (string) => {
+  //   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  // };
 
   return (
     <nav className="navbar">
@@ -34,8 +35,8 @@ const Navbar = () => {
       <div className="nav-buttons">
         {isLoggedIn ? (
           <>
-            <h4 className="hello">Hello <span className="username">{capitalizeFirstLetter(user?.fname)} </span></h4>
-            <p onClick={handleLogout} className="btn-logout">Logout</p>
+            <h4 className="hello"><User className="w-4 h-4 text-blue-500" /> <span className="username">{user?.fname} </span></h4>
+            <p onClick={handleLogout} className="btn-logout">logout</p>
           </>
         ) : (
           <>
