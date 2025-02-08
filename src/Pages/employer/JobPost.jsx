@@ -36,7 +36,7 @@ const JobPost = () => {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/cities/all");
+        const response = await fetch("http://localhost:8081/api/cities/all");
         if (!response.ok) throw new Error("Failed to fetch cities");
 
         const data = await response.json();
@@ -53,7 +53,7 @@ const JobPost = () => {
     const fetchDisabilityCategory = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/api/disablities-categories/all"
+          "http://localhost:8081/api/disablities-categories/all"
         );
         if (!response.ok)
           throw new Error("Failed to fetch disability categories");
@@ -71,7 +71,7 @@ const JobPost = () => {
   useEffect(() => {
     const fetchJobTypes = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/job-types/all");
+        const response = await fetch("http://localhost:8081/api/job-types/all");
         if (!response.ok) throw new Error("Failed to fetch job types");
 
         const data = await response.json();
