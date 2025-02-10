@@ -27,7 +27,7 @@ const JobPost = () => {
     detailed_address: "",
     cityId: "",
     deadline: "",
-    is_active: true
+    
   });
 
   const [cities, setCities] = useState([]);
@@ -112,10 +112,9 @@ const JobPost = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "is_active" ? value === "true" : value
+      [name]: value
     }));
   };
 
@@ -132,8 +131,9 @@ const JobPost = () => {
 
     const jobPostData = {
       ...formData,
-      employer_id: employerId, // Direct property
-      city_id: formData.cityId  // Direct property
+      employer_id: employerId,
+      city_id: formData.cityId,
+      is_active: true // Always set to true when posting a job
     };
 
     console.log("Job post data:", jobPostData);
@@ -220,8 +220,8 @@ const JobPost = () => {
           <Grid item xs={6}>
             <Select
               fullWidth
-              name="category"
-              value={formData.category || ""}
+              name="job_category"
+              value={formData.job_category || ""}
               onChange={handleChange}
               displayEmpty
               variant="outlined"
@@ -328,7 +328,7 @@ const JobPost = () => {
             <TextField
               fullWidth
               label="Detailed Address"
-              name="address"
+              name="detailed_address"
               rows={2}
               multiline
               onChange={handleChange}
@@ -347,18 +347,7 @@ const JobPost = () => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={6}>
-            <Select
-              fullWidth
-              name="is_active"
-              value={formData.is_active}
-              onChange={handleChange}
-              variant="outlined"
-            >
-              <MenuItem value={true}>Active</MenuItem>
-              <MenuItem value={false}>Inactive</MenuItem>
-            </Select>
-          </Grid>
+          
           <Grid
             item
             xs={12}
@@ -373,7 +362,7 @@ const JobPost = () => {
               onClick={handleSubmit}
               disabled={loading}
             >
-              {loading ? "Posting..." : "Post Job"}
+              {loading ? "Posting..." : "Post Job"}	
             </Button>
           </Grid>
           {error && (

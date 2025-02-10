@@ -1,16 +1,12 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
+import config from "../../config";
 import {
   Box,
   Card,
   CardContent,
   Typography,
   Grid,
-  Select,
-  MenuItem,
-  TextField,
-  FormControl,
-  InputLabel,
   Paper,
   Table,
   TableBody,
@@ -18,32 +14,85 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Button
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Chip
 } from "@mui/material";
 import { Edit as EditIcon, Close as CloseIcon } from "@mui/icons-material";
 
-const mockJobs = [
-  {
-    id: 1,
-    title: "Senior React Developer",
-    applicants: 12,
-    status: "Active",
-    postedDate: "2024-02-15",
-    expirationDate: "2024-03-15"
-  }
-];
-
 export default function Dashboard() {
+  const { user } = useContext(UserContext);
+  const employerId = user?.employer_id;
 
-  const { user } = useContext(UserContext); // Get user from context
+  const [jobs, setJobs] = useState([]);
+  const [stats, setStats] = useState({
+    totalJobsPosted: 0,
+    activeJobPosts: 0,
+    totalCandidatesHired: 0
+  });
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
-  // Extract job-related data from user
-  const totalJobsPosted = user?.total_job_posted || 0;
-  const totalCandidatesHired = user?.total_cand_hired || 0;
-  const activeJobPosts = user?.active_job_posts || 0;
+  const fetchJobs = async () => {
+    try {
+      const response = await fetch(`${config.url.employerJobs}/${employerId}`);
+      if (!response.ok) throw new Error("Failed to fetch jobs");
+      const data = await response.json();
+      setJobs([...data]);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    }
+  };
 
-  const [jobFilter, setJobFilter] = useState("all");  
-  const [sortOrder, setSortOrder] = useState("newest");
+  const fetchStats = async () => {
+    try {
+      const response = await fetch(`${config.url.employerStats}/${employerId}`);
+      if (!response.ok) throw new Error("Failed to fetch stats");
+      const data = await response.json();
+      setStats(data);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (employerId) {
+      fetchJobs();
+      fetchStats();
+    }
+  }, [employerId]);
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedJobId(null);
+  };
+
+  const confirmCloseJob = (jobId) => {
+    setSelectedJobId(jobId);
+    setOpenDialog(true);
+  };
+
+  const handleCloseJob = async () => {
+    if (!selectedJobId) return;
+
+    try {
+      const response = await fetch(`${config.url.deleteJob}/${selectedJobId}`, {
+        method: "DELETE"
+      });
+      if (!response.ok) throw new Error("Failed to close job");
+
+      fetchJobs(); // Fetch updated job list
+      fetchStats(); // Fetch updated stats
+    } catch (error) {
+      console.error("Error closing job:", error);
+    } finally {
+      handleCloseDialog();
+    }
+  };
 
   return (
     <Box>
@@ -59,7 +108,7 @@ export default function Dashboard() {
           >
             <CardContent>
               <Typography variant="h6">Total Jobs Posted</Typography>
-              <Typography variant="h3">{totalJobsPosted}</Typography>
+              <Typography variant="h3">{stats.totalJobsPosted}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -74,11 +123,11 @@ export default function Dashboard() {
           >
             <CardContent>
               <Typography variant="h6">Active Jobs</Typography>
-              <Typography variant="h3">{activeJobPosts}</Typography>
+              <Typography variant="h3">{stats.activeJobPosts}</Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={4}>
+        {/* <Grid item xs={12} sm={4}>
           <Card
             sx={{
               background: "#0d98ba",
@@ -89,67 +138,11 @@ export default function Dashboard() {
           >
             <CardContent>
               <Typography variant="h6">Total Hired</Typography>
-              <Typography variant="h3">{totalCandidatesHired}</Typography>
+              <Typography variant="h3">{stats.totalCandidatesHired}</Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Grid> */}
       </Grid>
-
-      <Box
-        sx={{
-          mb: 3,
-          display: "flex",
-          justifyContent: "space-between", // Distribute the space between left and right
-          backgroundColor: "#f5f5f5",
-          padding: 2,
-          borderRadius: "8px"
-        }}  
-      >
-        {/* Left side: Job Status and Search */}
-        <Box sx={{ display: "flex", gap: 2 , }}>
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel>Job Status</InputLabel>
-            <Select
-              value={jobFilter}
-              label="Job Status"
-              onChange={e => setJobFilter(e.target.value)}
-              sx={{ height: "40px" }} // Set height for consistency
-            >
-              <MenuItem value="all">All Jobs</MenuItem>
-              <MenuItem value="openings">Openings</MenuItem>
-              <MenuItem value="closed">Closed Jobs</MenuItem>
-            </Select>
-          </FormControl>
-
-          {/* Search field */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            size="small"
-            sx={{
-              width: "160px", // Smaller width for the search field
-              backgroundColor: "white",
-              borderRadius: "4px",
-              height: "40px", // Ensuring height consistency
-              input: { height: "21px" } // Adjust the input height as well
-            }}
-          />
-        </Box>
-
-        {/* Right side: Sort By */}
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>Sort By</InputLabel>
-          <Select
-            value={sortOrder}
-            label="Sort By"
-            onChange={e => setSortOrder(e.target.value)}
-            sx={{ height: "40px", borderRadius :"15px" }} // Set height for consistency
-          >
-            <MenuItem value="newest">Newest</MenuItem>
-            <MenuItem value="oldest">Oldest</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
 
       <TableContainer
         component={Paper}
@@ -167,22 +160,25 @@ export default function Dashboard() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {mockJobs.map(job =>
-              <TableRow key={job.id}>
+            {jobs.map((job) => (
+              <TableRow key={job.job_post_id}>
+                <TableCell>{job.designation}</TableCell>
+                <TableCell>{job.applicants}</TableCell>
                 <TableCell>
-                  {job.title}
+                  <Chip
+                    label={job.active ? "Active" : "Closed"}
+                    sx={{
+                      backgroundColor: job.active ? "#4CAF50" : "#F44336",
+                      color: "white",
+                      fontWeight: "bold"
+                    }}
+                  />
                 </TableCell>
                 <TableCell>
-                  {job.applicants}
+                  {new Date(job.created_at).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  {job.status}
-                </TableCell>
-                <TableCell>
-                  {job.postedDate}
-                </TableCell>
-                <TableCell>
-                  {job.expirationDate}
+                  {new Date(job.deadline).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
                   <Button
@@ -203,15 +199,30 @@ export default function Dashboard() {
                     color="error"
                     size="small"
                     sx={{ borderRadius: "8px" }}
+                    onClick={() => confirmCloseJob(job.job_post_id)}
                   >
                     Close
                   </Button>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Close</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to close this job?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleCloseJob} color="error">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

@@ -16,7 +16,11 @@ const config = {
     forgotPassword: `${authURL}/forgot-password`, // Updated Endpoint
     resendOtp: `${authURL}/resend-otp`, // New Resend OTP Endpoint
     resetPassword: `${authURL}/reset-password`,
-    createJobPost: `${jpmURL}/create`
+    createJobPost: `${jpmURL}/create`,
+    employerStats: `${jpmURL}/employer/stats`,
+    employerJobs: `${jpmURL}/jobs`,
+    deleteJob: `${jpmURL}/delete`,
+    updateJob: `${jpmURL}/update`
   },
   doturl: {
     totalEmployers: `${dotnetURL}/totalEmployers`,
