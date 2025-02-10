@@ -66,7 +66,7 @@ function LandingPage() {
           </h1>
           <p>Empowering careers, embracing abilities</p>
           <div className="cta-buttons">
-            <button className="btn btn-primary">Find Jobs</button>
+            <button onClick={() => navigate("/search")} className="btn btn-primary">Find Jobs</button>
             <button
               className="btn btn-secondary"
               onClick={handlePostJobClick} // Handle "Post Job" click

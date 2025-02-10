@@ -4,12 +4,13 @@ import logo from "../../../../public/logo.png";
 import { User } from "lucide-react";
 import "./Navbar.css";
 import { UserContext } from "../../../App";
+import { Avatar, Chip, Tooltip } from "@mui/material";
 
 const Navbar = () => {
   const { user, isLoggedIn, setIsLoggedIn, setUser } = useContext(UserContext);
-  console.log("User value  ->>> "+user);
-  console.log("Login value  ->> "+isLoggedIn);
-  
+  console.log("User value  ->>> " + user);
+  console.log("Login value  ->> " + isLoggedIn);
+
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
@@ -19,8 +20,8 @@ const Navbar = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
-    localStorage.removeItem('userData');
-    navigate('/login');
+    localStorage.removeItem("userData");
+    navigate("/login");
   };
 
   // const capitalizeFirstLetter = (string) => {
@@ -29,14 +30,25 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">
+      <div onClick={() => navigate("/landing")} className="navbar-brand">
         <img src={logo} alt="Logo" className="brand-logo clipped-logo" />
       </div>
       <div className="nav-buttons">
         {isLoggedIn ? (
           <>
-            <h4 className="hello"><User className="w-4 h-4 text-blue-500" /> <span className="username">{user?.fname} </span></h4>
-            <p onClick={handleLogout} className="btn-logout">logout</p>
+            <Tooltip title="logout" placement="bottom-end">
+              <Chip
+                avatar={
+                  <Avatar
+                    alt="User Avatar"
+                    src="https://img.freepik.com/free-psd/3d-render-young-businesswoman-with-long-brown-hair-wearing-light-blue-blazer-white-shirt-she-looks-friendly-approachable-perfect-avatar-professional-woman_632498-32059.jpg"
+                  />
+                }
+                label={user.fname}
+                variant="outlined"
+                onClick={handleLogout}
+              />
+            </Tooltip>
           </>
         ) : (
           <>
