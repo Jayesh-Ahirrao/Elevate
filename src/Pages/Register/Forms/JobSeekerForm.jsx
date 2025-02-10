@@ -81,7 +81,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   }, [step]);
 
   useEffect(() => {
-    fetch("http://localhost:8081/api/states")
+    fetch("http://localhost:8080/api/states")
       .then((response) => response.json())
       .then((data) => setStates(data))
       .catch((error) => console.error("Error fetching states:", error));
@@ -89,7 +89,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
 
   useEffect(() => {
     if (formData.state) {
-      fetch(`http://localhost:8081/api/cities?stateId=${formData.state}`)
+      fetch(`http://localhost:8080/api/cities?stateId=${formData.state}`)
         .then((response) => response.json())
         .then((data) => setCities(data))
         .catch((error) => console.error("Error fetching cities:", error));
@@ -102,7 +102,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
     const fetchDisabilityCategory = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8081/api/disablities-categories/all"
+          "http://localhost:8080/api/disablities-categories/all"
         );
         if (!response.ok)
           throw new Error("Failed to fetch disability categories");
@@ -120,7 +120,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const validateUdidFromServer = async (udid) => {
     try {
       const response = await fetch(
-        `http://localhost:8081/api/validate-udid?udid=${udid}`
+        `http://localhost:8080/api/validate-udid?udid=${udid}`
       );
       const isValid = await response.json();
       

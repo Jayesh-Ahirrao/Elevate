@@ -10,37 +10,64 @@ import {
   Grid
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import config from "../../Config";
 
 const JobPost = () => {
   const [formData, setFormData] = useState({
     designation: "",
-    description: "",
-    jobType: "",
-    category: "",
-    companyDescription: "",
-    minExperience: "",
-    maxExperience: "",
-    minSalary: "",
-    maxSalary: "",
-    rounds: "",
-    address: "",
-    city: "",
-    deadline: "" // Added deadline field
+    job_desc: "",
+    job_type: "",
+    job_category: "", // Corrected field name
+    comp_desc: "",
+    min_exp: "",
+    max_exp: "",
+    min_sal: "",
+    max_sal: "",
+    no_of_rounds: "",
+    detailed_address: "",
+    cityId: "",
+    deadline: "",
+    is_active: true
   });
 
   const [cities, setCities] = useState([]);
   const [disabilityCategories, setDisabilityCategories] = useState([]);
   const [jobTypes, setJobTypes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [employerId, setEmployerId] = useState(null);
+
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    const userDataString = localStorage.getItem("userData");
+  
+    if (userDataString) {
+      try {
+        const parsedData = JSON.parse(userDataString);
+        const parsedUserData = parsedData.userData; // Extracting the userData object
+        const empId = parsedUserData?.employer_id;
+  
+        if (empId) {
+          setEmployerId(empId); // Set employerId in state
+        } else {
+          console.warn("Employer ID is missing from userData.");
+        }
+      } catch (error) {
+        console.error("Error parsing userData from localStorage:", error);
+      }
+    } else {
+      console.warn("No userData found in localStorage.");
+    }
+  }, []);
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/cities/all");
+        const response = await fetch("http://localhost:8052/api/cities/all");
         if (!response.ok) throw new Error("Failed to fetch cities");
 
         const data = await response.json();
-        console.log("Fetched Cities:", data); // Debugging
         setCities(data);
       } catch (error) {
         console.error("Error fetching cities:", error);
@@ -53,7 +80,7 @@ const JobPost = () => {
     const fetchDisabilityCategory = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8081/api/disablities-categories/all"
+          "http://localhost:8052/api/disablities-categories/all"
         );
         if (!response.ok)
           throw new Error("Failed to fetch disability categories");
@@ -71,7 +98,7 @@ const JobPost = () => {
   useEffect(() => {
     const fetchJobTypes = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/job-types/all");
+        const response = await fetch("http://localhost:8052/api/job-types/all");
         if (!response.ok) throw new Error("Failed to fetch job types");
 
         const data = await response.json();
@@ -83,13 +110,53 @@ const JobPost = () => {
     fetchJobTypes();
   }, []);
 
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "is_active" ? value === "true" : value
+    }));
   };
 
-  const handleSubmit = () => {
-    console.log("Job Posted:", formData);
-    navigate("/dashboard");
+  const handleSubmit = async () => {
+    console.log("Form data:", formData);
+
+    if (!employerId) {
+      setError("Employer ID is missing. Please log in again.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    const jobPostData = {
+      ...formData,
+      employer_id: employerId, // Direct property
+      city_id: formData.cityId  // Direct property
+    };
+
+    console.log("Job post data:", jobPostData);
+
+    try {
+      const response = await fetch(`${config.url.createJobPost}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(jobPostData)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+
+      alert("Job posted successfully!");
+      navigate("/dashboard");
+    } catch (error) {
+      setError(error.message || "Failed to post job.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,59 +166,55 @@ const JobPost = () => {
         margin: "auto",
         mt: 5,
         p: 3,
-        background : "transparent",
-        // border: "1px solidrgb(255, 255, 255)",
-        borderRadius: "8px",
-        backgroundColor: "white",
-        // boxShadow: 3
+        backgroundColor: "white"
       }}
     >
       <CardContent>
-        <Typography variant="h5" gutterBottom sx={{ color: "#1976d2" , marginBottom : "2rem", fontWeight: "bold"}}>
+        <Typography
+          variant="h5"
+          gutterBottom
+          sx={{ color: "#1976d2", fontWeight: "bold" }}
+        >
           Post a Job
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Job Post Designation"
+              label="Job Designation"
               name="designation"
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               label="Job Description"
-              name="description"
+              name="job_desc"
               multiline
-              rows={3}
+              rows={2}
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={6}>
             <Select
               fullWidth
-              name="jobType"
-              value={formData.jobType}
+              name="job_type"
+              value={formData.job_type}
               onChange={handleChange}
               displayEmpty
               variant="outlined"
-              sx={{ mb: 2 }}
             >
               <MenuItem value="" disabled>
                 Select Job Type
               </MenuItem>
-              {jobTypes.length > 0 &&
-                jobTypes.map((type, index) =>
-                  <MenuItem key={index} value={type}>
-                    {type.replace(/_/g, " ")}
-                  </MenuItem>
-                )}
+              {jobTypes.map((type, index) => (
+                <MenuItem key={index} value={type}>
+                  {type.replace(/_/g, " ")}
+                </MenuItem>
+              ))}
             </Select>
           </Grid>
           <Grid item xs={6}>
@@ -183,144 +246,141 @@ const JobPost = () => {
             <TextField
               fullWidth
               label="Company Description"
-              name="companyDescription"
+              multiline
+              rows={2}
+              name="comp_desc"
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               fullWidth
-              label="Minimum Experience (Years)"
-              name="minExperience"
+              label="Min Experience (Years)"
+              name="min_exp"
               type="number"
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               fullWidth
-              label="Maximum Experience (Years)"
-              name="maxExperience"
+              label="Max Experience (Years)"
+              name="max_exp"
               type="number"
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               fullWidth
-              label="Minimum Salary ($)"
-              name="minSalary"
+              label="Min Salary ($)"
+              name="min_sal"
               type="number"
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               fullWidth
-              label="Maximum Salary ($)"
-              name="maxSalary"
+              label="Max Salary ($)"
+              name="max_sal"
               type="number"
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               fullWidth
               label="Number of Rounds"
-              name="rounds"
+              name="no_of_rounds"
               type="number"
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
+          </Grid>
+          <Grid item xs={6}>
+            <Select
+              fullWidth
+              name="cityId"
+              value={formData.cityId}
+              onChange={(e) =>
+                setFormData({ ...formData, cityId: e.target.value })
+              }
+              displayEmpty
+              variant="outlined"
+            >
+              <MenuItem value="" disabled>
+                Select City
+              </MenuItem>
+              {cities.map((city) => (
+                <MenuItem key={city.cityId} value={city.cityId}>
+                  {city.cityName}
+                </MenuItem>
+              ))}
+            </Select>
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               label="Detailed Address"
               name="address"
+              rows={2}
+              multiline
               onChange={handleChange}
               variant="outlined"
               sx={{ mb: 2 }}
             />
           </Grid>
           <Grid item xs={6}>
-            <Select
-              fullWidth
-              name="city"
-              value={formData.city || ""}
-              onChange={handleChange}
-              displayEmpty
-              variant="outlined"
-              sx={{ mb: 2 }}
-            >
-              <MenuItem value="" disabled sx={{ color: "black" }}>
-                Select City
-              </MenuItem>
-              {cities.length > 0 &&
-                cities.map(city =>
-                  <MenuItem
-                    key={city.cityId}
-                    value={city.cityName}
-                    sx={{ color: "black" }}
-                  >
-                    {city.cityName}
-                  </MenuItem>
-                )}
-            </Select>
-          </Grid>
-          <Grid item xs={6}>
             <TextField
               fullWidth
-              label="Application Deadline"
+              label="Deadline"
               name="deadline"
               type="date"
               InputLabelProps={{ shrink: true }}
               onChange={handleChange}
               variant="outlined"
-              sx={{ mb: 2 }}
             />
+          </Grid>
+          <Grid item xs={6}>
+            <Select
+              fullWidth
+              name="is_active"
+              value={formData.is_active}
+              onChange={handleChange}
+              variant="outlined"
+            >
+              <MenuItem value={true}>Active</MenuItem>
+              <MenuItem value={false}>Inactive</MenuItem>
+            </Select>
           </Grid>
           <Grid
             item
             xs={12}
             sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
           >
-            <Button
-              variant="outlined"
-              color="#38b0ff"
-              onClick={() => navigate("/dashboard")}
-              sx={{
-                borderRadius: "8px",
-                "&:hover": { bgcolor: "#38b0ff" }
-              }}
-            >
+            <Button variant="outlined" onClick={() => navigate("/dashboard")}>
               Cancel
             </Button>
             <Button
               variant="contained"
               color="primary"
               onClick={handleSubmit}
-              sx={{
-                borderRadius: "8px",
-                bgcolor: "#38b0ff",
-                "&:hover": { bgcolor: "white", border: "2px solid #38b0ff", color : "#38b0ff" },
-                color: "white"
-              }}
+              disabled={loading}
             >
-              Post Job
+              {loading ? "Posting..." : "Post Job"}
             </Button>
           </Grid>
+          {error && (
+            <Typography color="error" sx={{ mt: 2 }}>
+              {error}
+            </Typography>
+          )}
         </Grid>
       </CardContent>
     </Card>

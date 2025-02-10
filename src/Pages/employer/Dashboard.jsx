@@ -42,7 +42,7 @@ export default function Dashboard() {
   const totalCandidatesHired = user?.total_cand_hired || 0;
   const activeJobPosts = user?.active_job_posts || 0;
 
-  const [jobFilter, setJobFilter] = useState("all");
+  const [jobFilter, setJobFilter] = useState("all");  
   const [sortOrder, setSortOrder] = useState("newest");
 
   return (
