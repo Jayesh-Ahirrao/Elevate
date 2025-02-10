@@ -63,7 +63,7 @@ export default function Applicants() {
         <Box sx={{ display: "flex", gap: 2 }}>
           <FormControl sx={{ minWidth: 120 }}>
             <InputLabel>Job Status</InputLabel>
-            <Select defaultValue="all" label="Job Status">
+            <Select defaultValue="all" label="Job Status" style={{height : "40px",borderRadius : "15px"}}>
               <MenuItem value="all">All Jobs</MenuItem>
               <MenuItem value="openings">Openings</MenuItem>
               <MenuItem value="closed">Closed Jobs</MenuItem>
@@ -80,6 +80,7 @@ export default function Applicants() {
               backgroundColor: "white",
               borderRadius: "4px",
               height: "40px",
+              borderRadius : "15px",
               input: { height: "21px" }
             }}
           />
@@ -88,7 +89,7 @@ export default function Applicants() {
         {/* Right side: Sort By */}
         <FormControl sx={{ minWidth: 120 }}>
           <InputLabel>Sort By</InputLabel>
-          <Select defaultValue="newest" label="Sort By">
+          <Select defaultValue="newest" label="Sort By"  style={{height : "40px", borderRadius : "15px"}}>
             <MenuItem value="newest">Newest</MenuItem>
             <MenuItem value="oldest">Oldest</MenuItem>
           </Select>
@@ -132,7 +133,7 @@ export default function Applicants() {
                   <Button
                     variant="contained"
                     size="small"
-                    sx={{ m: 1, backgroundColor: "#1976d2", color: "white" }}
+                    sx={{ m: 1, backgroundColor: "#38BFF0", color: "white" }}
                     onClick={() => setOpenMeeting(true)}
                   >
                     Create Meeting
@@ -141,7 +142,7 @@ export default function Applicants() {
                     startIcon={<DownloadIcon />}
                     variant="outlined"
                     size="small"
-                    sx={{ m: 1, borderColor: "#1976d2", color: "#1976d2" }}
+                    sx={{ m: 1, borderColor: "#38BFF0", color: "#38BFF0" }}
                   >
                     Resume
                   </Button>

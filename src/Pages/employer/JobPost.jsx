@@ -214,7 +214,7 @@ const JobPost = () => {
           <Grid item xs={6}>
             <TextField
               fullWidth
-              label="Minimum Salary ($)"
+              label="Minimum Salary (₹)"
               name="minSalary"
               type="number"
               onChange={handleChange}
@@ -225,7 +225,7 @@ const JobPost = () => {
           <Grid item xs={6}>
             <TextField
               fullWidth
-              label="Maximum Salary ($)"
+              label="Maximum Salary (₹)"
               name="maxSalary"
               type="number"
               onChange={handleChange}

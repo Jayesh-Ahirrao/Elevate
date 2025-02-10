@@ -45,30 +45,29 @@ const Login = () => {
       const { token, jobSeeker, employer, admin } = responseData;
 
       let userData = admin || employer || jobSeeker;
-      
+
       if (!token || !userData) {
-          throw new Error("Missing token or user data in response");
+        throw new Error("Missing token or user data in response");
       }
-      
-      
+
       // Save user data in localStorage
       localStorage.setItem("userData", JSON.stringify({ token, userData }));
       localStorage.setItem("userRole", userData.roleName);
       localStorage.setItem("isLoggedIn", "true");
-      
+
       setUser(userData);
       setIsLoggedIn(true);
-      
+
       // Redirect based on role
       if (userData.roleName === "ADMIN") {
-          navigate("/analytics");
+        navigate("/analytics");
       } else if (userData.roleName === "EMPLOYER") {
-          navigate("/dashboard");
+        navigate("/dashboard");
       } else if (userData.roleName === "JOBSEEKER") {
-          navigate("/landing");
+        navigate("/landing");
       } else {
-          navigate("/");
-      }      
+        navigate("/");
+      }
     } catch (error) {
       setError(error.message || "Login failed. Try again.");
     } finally {
@@ -104,24 +103,25 @@ const Login = () => {
             className={styles.loginButton}
             disabled={loading}
           >
-            {loading ? <LoadingCircle/> : "Login"}
+            {loading ? <LoadingCircle /> : "Login"}
           </button>
         </form>
 
         {/* Show progress indicator below the button when loading */}
         {loading && (
           <div className={styles.loadingWrapper}>
-            <LoadingCircle/>
+            <LoadingCircle />
           </div>
         )}
-
-        <p className="registrationLink">
-          New here? <Link to="/register">Register</Link>
-        </p>
-        <p className="forgotPassword">
-          <Link to="/forgot-password">Forgot Password?</Link>
-        </p>
-        {error && <p className={styles.error}>{error}</p>}
+        <div style={{marginTop : "2rem"}}>
+          <p className="registrationLink">
+            New here? <Link to="/register">Register</Link>
+          </p>
+          <p className="forgotPassword">
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
+          {error && <p className={styles.error}>{error}</p>}
+        </div>
       </div>
     </div>
   );

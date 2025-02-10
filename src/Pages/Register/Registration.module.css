@@ -9,10 +9,10 @@
 
 .formCard {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 4rem auto;
   background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  /* box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12); */
   overflow: hidden;
  
 }
@@ -27,8 +27,6 @@
   padding: 2rem;
   background: #38BFF0;
   color: white;
-
-
 }
 
 

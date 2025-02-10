@@ -113,7 +113,7 @@ export default function Dashboard() {
               value={jobFilter}
               label="Job Status"
               onChange={e => setJobFilter(e.target.value)}
-              sx={{ height: "40px" }} // Set height for consistency
+              sx={{ height: "40px" ,borderRadius : "15px"}} // Set height for consistency
             >
               <MenuItem value="all">All Jobs</MenuItem>
               <MenuItem value="openings">Openings</MenuItem>
