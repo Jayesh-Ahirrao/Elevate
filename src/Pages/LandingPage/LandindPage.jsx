@@ -8,8 +8,8 @@ import "./LandingPage.css";
 import { useContext } from "react";
 import { fetchJobs } from "../../api/jobPost";
 import { UserContext } from "../../App";
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css"; 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function LandingPage() {
   const location = useLocation();
@@ -26,9 +26,10 @@ function LandingPage() {
   useEffect(() => {
     const loadJobs = async () => {
       const fetchedJobs = await fetchJobs();
+      console.log("Fetched Jobs:", fetchedJobs);
       setJobs(fetchedJobs);
     };
-    loadJobs();
+    loadJobs(); 
   }, []);
 
   const settings = {
@@ -40,21 +41,21 @@ function LandingPage() {
     autoplay: true,
     autoplaySpeed: 2500,
     responsive: [
-      {   
+      {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
-        },
+          slidesToScroll: 1
+        }
       },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+          slidesToScroll: 1
+        }
+      }
+    ]
   };
 
   return (
@@ -95,23 +96,29 @@ function LandingPage() {
                   key={job.job_post_id}
                   title={job.designation}
                   company={job.comp_desc}
-                  jobType={job.job_type.replace(/_/g, " ")}
+                  jobType={job.job_type?.replace(/_/g, " ") || "N/A"}
                   category={job.job_category || "General"}
                   salaryRange={`${(job.min_sal / 1000).toFixed(1)}K - ${(job.max_sal / 1000).toFixed(1)}K`}
-                  experience={`${job.min_exp} - ${job.max_exp} years`}
-                  deadline={new Date(job.deadline).toLocaleDateString()}
+                  experience={`${job.min_exp || 0} - ${job.max_exp || 0} years`}
+                  deadline={job.deadline ? new Date(job.deadline).toLocaleDateString() : "N/A"}
+                  job_description={job.job_desc || "No description available"} // Fix
+                  no_of_rounds={job.no_of_rounds || 0} // Ensure no_of_rounds is provided
+                  comp_desc={job.comp_desc || "N/A"} // Ensure comp_desc is provided
                 />
               ))}
             </Slider>
           ) : (
-            <p>Loading jobs...</p>
+            <p>No jobs available</p>
           )}
         </section>
+
 
         <section className="info-section">
           <h2>
             Why Choose{" "}
-            <span style={{ letterSpacing: "-3px", fontFamily: "League Spartan" }}>
+            <span
+              style={{ letterSpacing: "-3px", fontFamily: "League Spartan" }}
+            >
               elevate
             </span>
             ?
@@ -119,15 +126,24 @@ function LandingPage() {
           <div className="info-grid">
             <div className="info-card">
               <h3>Inclusive Opportunities</h3>
-              <p>We partner with companies committed to creating an inclusive workplace.</p>
+              <p>
+                We partner with companies committed to creating an inclusive
+                workplace.
+              </p>
             </div>
             <div className="info-card">
               <h3>Accessible Platform</h3>
-              <p>Our platform is designed with accessibility in mind, ensuring a seamless experience for all users.</p>
+              <p>
+                Our platform is designed with accessibility in mind, ensuring a
+                seamless experience for all users.
+              </p>
             </div>
             <div className="info-card">
               <h3>Support Network</h3>
-              <p>Connect with a community that understands and supports your career journey.</p>
+              <p>
+                Connect with a community that understands and supports your
+                career journey.
+              </p>
             </div>
           </div>
         </section>
@@ -139,7 +155,9 @@ function LandingPage() {
               us :)
             </span>
           </h2>
-          <p>We're committed to breaking down barriers and building up talents.</p>
+          <p>
+            We're committed to breaking down barriers and building up talents.
+          </p>
         </section>
       </main>
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Button,
   Dialog,
@@ -12,11 +13,10 @@ import {
   Grid,
   Container,
   Divider,
-  Chip,
+  Chip
 } from "@mui/material";
 import {
   BusinessCenter,
-  LocationOn,
   AttachMoney,
   Timer,
   WorkHistory,
@@ -24,40 +24,34 @@ import {
   People,
   Email,
   Language,
-  Description,
+  Description
 } from "@mui/icons-material";
 import "./ApplyJob.css";
 import Navbar from "../LandingPage/Navbar/Navbar";
 
 const ApplyJob = () => {
+  const location = useLocation();
+  const jobDetails = location.state || {};
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
     message: "",
-    resume: null,
+    resume: null
   });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     console.log(formData);
     handleClose();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = e => {
     setFormData({ ...formData, resume: e.target.files[0] });
   };
-
-  const InfoItem = ({ icon: Icon, label, value }) => (
-    <Box className="info-item">
-      <Icon className="info-icon" />
-      <span className="info-label">{label}:</span>
-      <span className="info-value">{value}</span>
-    </Box>
-  );
 
   return (
     <div>
@@ -70,10 +64,10 @@ const ApplyJob = () => {
               <Card className="job-details-card">
                 <Box className="job-header">
                   <Typography variant="h4" className="job-title">
-                    Senior Software Engineer
+                    {jobDetails.title || "Job Title"}
                   </Typography>
                   <Typography variant="h5" className="company-name">
-                    Tech Solutions Inc.
+                    {jobDetails.company || "Company Name"}
                   </Typography>
                   <Button
                     variant="contained"
@@ -89,48 +83,57 @@ const ApplyJob = () => {
                 <Box className="job-info">
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
-                      <InfoItem
-                        icon={BusinessCenter}
-                        label="Job Type"
-                        value="Private"
-                      />
-                      <InfoItem
-                        icon={LocationOn}
-                        label="Location"
-                        value="Hybrid"
-                      />
-                      <InfoItem
-                        icon={AttachMoney}
-                        label="Salary Range"
-                        value="$80,000 - $120,000"
-                      />
+                      <Box className="info-item">
+                        <BusinessCenter className="info-icon" />
+                        <span className="info-label">Job Type:</span>
+                        <span className="info-value">
+                          {jobDetails.jobType || "Not Specified"}
+                        </span>
+                      </Box>
+                      <Box className="info-item">
+                        <AttachMoney className="info-icon" />
+                        <span className="info-label">Salary Range:</span>
+                        <span className="info-value">
+                          {jobDetails.salaryRange || "Not Specified"}
+                        </span>
+                      </Box>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <InfoItem
-                        icon={Timer}
-                        label="Interview Rounds"
-                        value="3"
-                      />
-                      <InfoItem
-                        icon={WorkHistory}
-                        label="Experience"
-                        value="3-5 years"
-                      />
+                      <Box className="info-item">
+                        <WorkHistory className="info-icon" />
+                        <span className="info-label">Experience:</span>
+                        <span className="info-value">
+                          {jobDetails.experience || "Not Specified"}
+                        </span>
+                      </Box>
+                      <Box className="info-item">
+                        <Timer className="info-icon" />
+                        <span className="info-label">Deadline:</span>
+                        <span className="info-value">
+                          {jobDetails.deadline || "Not Specified"}
+                        </span>
+                      </Box>
                     </Grid>
                   </Grid>
                 </Box>
 
+                {/* No of Rounds */}
+                <Box className="info-item">
+                  <People className="info-icon" />
+                  <span className="info-label">Number of Rounds:</span>
+                  <span className="info-value">
+                    {jobDetails.no_of_rounds || "Not Specified"}
+                  </span>
+                </Box>
+
+                {/* Job Description */}
                 <Box className="job-description-section">
                   <Typography variant="h6" className="section-title">
                     Job Description
                   </Typography>
                   <Typography className="job-description">
-                    We are looking for an experienced Software Engineer to join
-                    our team. The ideal candidate will have strong
-                    problem-solving skills and experience with modern web
-                    technologies.
-                    <br />
-                    <br />
+                    {jobDetails.job_description ||
+                      "No job description provided."}
                   </Typography>
                 </Box>
               </Card>
@@ -143,139 +146,43 @@ const ApplyJob = () => {
                   Company Details
                 </Typography>
                 <Box className="company-info">
-                  <InfoItem
-                    icon={Business}
-                    label="Company Name"
-                    value="Tech Solutions Inc."
-                  />
-                  <InfoItem
-                    icon={People}
-                    label="Company Size"
-                    value="500+ employees"
-                  />
-                  <InfoItem
-                    icon={Email}
-                    label="Email"
-                    value="careers@techsolutions.com"
-                  />
-                  <InfoItem
-                    icon={Language}
-                    label="Website"
-                    value="www.techsolutions.com"
-                  />
-                  <InfoItem
-                    icon={Description}
-                    label="Total Jobs Posted"
-                    value="42"
-                  />
+                  <Box className="info-item">
+                    <Business className="info-icon" />
+                    <span className="info-label">Company Name:</span>
+                    <span className="info-value">
+                      {jobDetails.company || "Not Specified"}
+                    </span>
+                  </Box>
+                  <Box className="info-item">
+                    <People className="info-icon" />
+                    <span className="info-label">Company Size:</span>
+                    <span className="info-value">500+ employees</span>
+                  </Box>
+                  <Box className="info-item">
+                    <Email className="info-icon" />
+                    <span className="info-label">Email:</span>
+                    <span className="info-value">
+                      careers@techsolutions.com
+                    </span>
+                  </Box>
+                  <Box className="info-item">
+                    <Language className="info-icon" />
+                    <span className="info-label">Website:</span>
+                    <span className="info-value">www.techsolutions.com</span>
+                  </Box>
+                  <Box className="info-item">
+                    <Description className="info-icon" />
+                    <span className="info-label">Total Jobs Posted:</span>
+                    <span className="info-value">42</span>
+                  </Box>
                 </Box>
                 <Divider className="section-divider" />
                 <Typography className="company-description">
-                  Tech Solutions Inc. is a leading technology company
-                  specializing in innovative software solutions. We're committed
-                  to creating an inclusive workplace that values diversity and
-                  supports employees with disabilities.
+                  {jobDetails.comp_desc || "No company description provided."}
                 </Typography>
-              </Card>
-            </Grid>
-
-            {/* Similar Jobs Section */}
-            <Grid item xs={12}>
-              <Card className="similar-jobs-card">
-                <Typography variant="h5" className="section-title">
-                  Other Jobs
-                </Typography>
-                <Grid container spacing={3}>
-                  {[1, 2, 3].map((job) => (
-                    <Grid item xs={12} sm={6} md={4} key={job}>
-                      <Card className="similar-job-item">
-                        <Typography variant="h6">Software Developer</Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                          Tech Company {job}
-                        </Typography>
-                        <Box className="job-tags">
-                          <Chip label="Full-time" className="job-tag" />
-                          <Chip label="Remote" className="job-tag" />
-                        </Box>
-                        <Button variant="outlined" className="view-job-button">
-                          View Details
-                        </Button>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
               </Card>
             </Grid>
           </Grid>
-
-          {/* Application Form Dialog */}
-          <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-            <DialogTitle className="dialog-title">
-              Apply for Position
-            </DialogTitle>
-            <DialogContent>
-              <form onSubmit={handleSubmit} className="application-form">
-                <TextField
-                  label="Email"
-                  type="email"
-                  required
-                  fullWidth
-                  margin="normal"
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-                <TextField
-                  label="Phone Number"
-                  type="tel"
-                  required
-                  fullWidth
-                  margin="normal"
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                />
-                <TextField
-                  label="Message"
-                  multiline
-                  rows={4}
-                  fullWidth
-                  margin="normal"
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                />
-                <Box className="file-upload">
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    className="upload-button"
-                  >
-                    Upload Resume
-                    <input
-                      type="file"
-                      hidden
-                      accept=".pdf,.doc,.docx"
-                      onChange={handleFileChange}
-                    />
-                  </Button>
-                  {formData.resume && (
-                    <Typography className="file-name">
-                      {formData.resume.name}
-                    </Typography>
-                  )}
-                </Box>
-              </form>
-            </DialogContent>
-            <DialogActions className="dialog-actions">
-              <Button onClick={handleClose} className="cancel-button">
-                Cancel
-              </Button>
-              <Button onClick={handleSubmit} className="submit-button">
-                Submit Application
-              </Button>
-            </DialogActions>
-          </Dialog>
         </Container>
       </div>
     </div>

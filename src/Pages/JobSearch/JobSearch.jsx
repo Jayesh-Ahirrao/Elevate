@@ -141,39 +141,45 @@ function JobSearch() {
           </div>
 
           <div className="filter-group">
-  <h3 className="filter-title">Job Type</h3>
-  <div className="filter-options">
-    {jobTypes.map((type) => (
-      <label key={type}>
-        <input
-          type="checkbox"
-          value={type}
-          checked={filters.jobType.includes(type)}
-          onChange={() => handleFilterChange("jobType", type)}
-        />
-        {type.replace(/_/g, " ")}
-      </label>
-    ))}
-  </div>
-</div>
+            <h3 className="filter-title">Job Type</h3>
+            <div className="filter-options">
+              {jobTypes.map((type) => (
+                <label key={type}>
+                  <input
+                    type="checkbox"
+                    value={type}
+                    checked={filters.jobType.includes(type)}
+                    onChange={() => handleFilterChange("jobType", type)}
+                  />
+                  {type.replace(/_/g, " ")}
+                </label>
+              ))}
+            </div>
+          </div>
 
-
-<div className="filter-group">
-  <h3 className="filter-title">Job Category</h3>
-  <div className="filter-options">
-    {disabilityCategories.map((category) => (
-      <label key={category.disabilityCatId}>
-        <input
-          type="checkbox"
-          value={category.disabilityCatName}
-          checked={filters.jobCategory.includes(category.disabilityCatName)}
-          onChange={() => handleFilterChange("jobCategory", category.disabilityCatName)}
-        />
-        {category.disabilityCatName}
-      </label>
-    ))}
-  </div>
-</div>
+          <div className="filter-group">
+            <h3 className="filter-title">Job Category</h3>
+            <div className="filter-options">
+              {disabilityCategories.map((category) => (
+                <label key={category.disabilityCatId}>
+                  <input
+                    type="checkbox"
+                    value={category.disabilityCatName}
+                    checked={filters.jobCategory.includes(
+                      category.disabilityCatName
+                    )}
+                    onChange={() =>
+                      handleFilterChange(
+                        "jobCategory",
+                        category.disabilityCatName
+                      )
+                    }
+                  />
+                  {category.disabilityCatName}
+                </label>
+              ))}
+            </div>
+          </div>
         </aside>
 
         {/* Main Content */}

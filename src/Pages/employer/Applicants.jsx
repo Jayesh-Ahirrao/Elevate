@@ -129,7 +129,7 @@ export default function Applicants() {
                   {applicant.information}
                 </TableCell>
                 <TableCell>
-                  <Button
+                  {/* <Button
                     variant="contained"
                     size="small"
                     sx={{ m: 1, backgroundColor: "#1976d2", color: "white" }}
@@ -144,7 +144,7 @@ export default function Applicants() {
                     sx={{ m: 1, borderColor: "#1976d2", color: "#1976d2" }}
                   >
                     Resume
-                  </Button>
+                  </Button> */}
                   <Button
                     color="success"
                     variant="contained"

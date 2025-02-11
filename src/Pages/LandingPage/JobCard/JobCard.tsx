@@ -1,7 +1,7 @@
-import React from 'react';
-import { Calendar, IndianRupee, Briefcase } from 'lucide-react';
-import './JobCard.css';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Calendar, IndianRupee, Briefcase } from "lucide-react";
+import "./JobCard.css";
+import { useNavigate } from "react-router-dom";
 
 interface JobCardProps {
   title: string;
@@ -11,24 +11,47 @@ interface JobCardProps {
   salaryRange: string;
   experience: string;
   deadline: string;
+  no_of_rounds: number; // Added no_of_rounds
+  job_description: string; // Added job_description
+  comp_desc: string;
 }
 
-const JobCard = ({ 
-  title, 
-  company, 
-  jobType, 
-  category, 
-  salaryRange, 
-  experience, 
-  deadline 
+const JobCard = ({
+  title,
+  company,
+  jobType,
+  category,
+  salaryRange,
+  experience,
+  deadline,
+  no_of_rounds,
+  job_description,
+  comp_desc
 }: JobCardProps) => {
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate("/applyJobs", {
+      state: {
+        title,
+        company,
+        jobType,
+        category,
+        salaryRange,
+        experience,
+        deadline,
+        no_of_rounds,
+        job_description,
+        comp_desc
+      }
+    });
+  };
 
   return (
     <div className="job-card">
       <h3 className="job-title">{title}</h3>
       <p className="company-name">{company}</p>
-      
+
       <div className="job-info">
         <div className="info-item">
           <IndianRupee size={16} />
@@ -48,8 +71,10 @@ const JobCard = ({
         <span className="location">{jobType}</span>
         <span className="job-type">{category}</span>
       </div>
-      
-      <button className="apply-btn" onClick={() => navigate("/applyJobs")}>View Details</button>
+
+      <button className="apply-btn" onClick={handleViewDetails}>
+        View Details
+      </button>
     </div>
   );
 };
