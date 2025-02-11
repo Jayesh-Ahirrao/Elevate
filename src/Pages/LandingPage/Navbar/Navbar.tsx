@@ -21,6 +21,8 @@ const Navbar = () => {
     setIsLoggedIn(false);
     setUser(null);
     localStorage.removeItem("userData");
+    localStorage.removeItem("IsLoggedIn");
+    localStorage.removeItem("userRole");
     navigate("/login");
   };
 

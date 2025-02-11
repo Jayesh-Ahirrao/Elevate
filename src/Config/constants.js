@@ -17,7 +17,7 @@ export const INITIAL_STATE = {
       fname: '',
       lname: '',
       udid: '',
-            
+      resume: '',      
       gender: '' , //caps
       dob: '', //YYYY/MM/DD
       experiance: "", //Enum 

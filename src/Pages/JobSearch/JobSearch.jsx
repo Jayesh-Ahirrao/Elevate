@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./JobSearch.css";
 import Navbar from "../LandingPage/Navbar/Navbar";
 import { fetchJobs } from "../../api/jobPost";
@@ -6,6 +7,7 @@ import { Briefcase, Calendar, IndianRupee } from "lucide-react";
 import { Chip } from "@mui/material";
 
 function JobSearch() {
+  const navigate = useNavigate();
   const [sortNewest, setSortNewest] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
@@ -168,7 +170,7 @@ function JobSearch() {
                     <span className="job-type"><Chip label={job.jobType} variant="outlined" /> </span>
                   </div>
 
-                  <button className="apply-btn">View Details</button>
+                  <button className="apply-btn" onClick={() => navigate("/applyJobs")}>View Details</button>
                 </div>
               </>
             ))}

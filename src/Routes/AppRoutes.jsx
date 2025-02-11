@@ -16,6 +16,7 @@ import AdminDLayout from "../components/AdminDLayout";
 import Employers from "../Pages/admin/Employer";
 import JobSeekers from "../Pages/admin/JobSeekers";
 import JobSearch from "../Pages/JobSearch/JobSearch";
+import ApplyJob from "../Pages/ApplyJob/ApplyJob";
 
 const AppRoutes = () => {
   const { user, isLoggedIn } = useContext(UserContext);
@@ -53,6 +54,7 @@ const AppRoutes = () => {
         <>
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/search" element={<JobSearch />} />
+          <Route path= "/applyJobs" element={<ApplyJob/>} />
           <Route path="/*" element={<Navigate to="/landing" />} />
         </>
       )}

@@ -144,10 +144,12 @@ function Register() {
 
       // Redirect to dashboard after short delay
       setTimeout(() => {
+        console.log("Navigating to home...");
         navigate("/", {
           state: { isEmployer: state.role === config.roles.employer }
         });
       }, 3000);
+      
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Failed to register. Please try again.");
