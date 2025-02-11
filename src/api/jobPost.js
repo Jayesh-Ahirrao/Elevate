@@ -1,6 +1,8 @@
+import config from "../Config";
+
 export const fetchJobs = async () => {
   try {
-    const response = await fetch("http://localhost:8052/api/jpm/all-jobs");
+    const response = await fetch(config.url.employerAllJobs);
     if (!response.ok) {
       throw new Error("Failed to fetch jobs");
     }
