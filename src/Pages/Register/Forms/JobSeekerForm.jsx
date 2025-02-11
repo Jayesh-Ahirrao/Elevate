@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import config from "../../../Config";
 import {
   TextField,
   FormControl,
@@ -81,7 +82,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   }, [step]);
 
   useEffect(() => {
-    fetch("http://localhost:8081/api/states")
+    fetch(config.url.allAuthStates)
       .then((response) => response.json())
       .then((data) => setStates(data))
       .catch((error) => console.error("Error fetching states:", error));
@@ -89,7 +90,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
 
   useEffect(() => {
     if (formData.state) {
-      fetch(`http://localhost:8081/api/cities?stateId=${formData.state}`)
+      fetch(`http://localhost:8050/auth/cities?stateId=${formData.state}`)
         .then((response) => response.json())
         .then((data) => setCities(data))
         .catch((error) => console.error("Error fetching cities:", error));
@@ -102,7 +103,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
     const fetchDisabilityCategory = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8081/api/disablities-categories/all"
+          config.url.allDisCat
         );
         if (!response.ok)
           throw new Error("Failed to fetch disability categories");
@@ -120,7 +121,7 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
   const validateUdidFromServer = async (udid) => {
     try {
       const response = await fetch(
-        `http://localhost:8081/api/validate-udid?udid=${udid}`
+        `http://localhost:8050/auth/validate-udid?udid=${udid}`
       );
       const isValid = await response.json();
       

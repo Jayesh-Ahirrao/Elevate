@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./JobSearch.css";
 import Navbar from "../LandingPage/Navbar/Navbar";
 import { fetchJobs } from "../../api/jobPost";
-import { Briefcase, Calendar, IndianRupee } from "lucide-react";
-import { Chip } from "@mui/material";
+import JobCard from "../LandingPage/JobCard/JobCard";
+import config from "../../Config"
 
 function JobSearch() {
   const navigate = useNavigate();
@@ -12,29 +12,72 @@ function JobSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     salary: 50000,
-    qualification: [],
     disabilityType: [],
+    jobType: [],
+    jobCategory: []
   });
 
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
+  const [disabilityCategories, setDisabilityCategories] = useState([]);
+  const [jobTypes, setJobTypes] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchJobs();
-      setJobs(data);
+      try {
+        const data = await fetchJobs();
+        console.log("Fetched Jobs:", data);
+        setJobs(data);
+        setFilteredJobs(data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
     };
     fetchData();
   }, []);
 
   useEffect(() => {
-    // filter jobs based on these
+    const fetchDisabilityCategory = async () => {
+      try {
+        const response = await fetch(config.url.allDisCat);
+        if (!response.ok) throw new Error("Failed to fetch disability categories");
+        const data = await response.json();
+        console.log("Fetched disability categories:", data);
+        setDisabilityCategories(data);
+      } catch (error) {
+        console.error("Error fetching disability categories:", error);
+      }
+    };
+    fetchDisabilityCategory();
+  }, []);
+
+  useEffect(() => {
+    const fetchJobTypes = async () => {
+      try {
+        const response = await fetch(config.url.allJobTypes);
+        if (!response.ok) throw new Error("Failed to fetch job types");
+        const data = await response.json();
+        setJobTypes(data);
+      } catch (error) {
+        console.error("Error fetching job types:", error);
+      }
+    };
+    fetchJobTypes();
+  }, []);
+
+  useEffect(() => {
     let filtered = jobs.filter((job) => {
-      const jobSalary = parseInt(job.maxSalary);
-
-      return jobSalary >= filters.salary;
+      const jobSalary = parseInt(job.max_sal);
+      const matchesSalary = jobSalary >= filters.salary;
+      const matchesDisabilityType =
+        filters.disabilityType.length === 0 ||
+        filters.disabilityType.includes(job.disability_type);
+      const matchesJobType =
+        filters.jobType.length === 0 || filters.jobType.includes(job.job_type);
+      const matchesJobCategory =
+        filters.jobCategory.length === 0 || filters.jobCategory.includes(job.job_category);
+      return matchesSalary && matchesDisabilityType && matchesJobType && matchesJobCategory;
     });
-
     setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
   }, [jobs, filters, sortNewest]);
 
@@ -45,7 +88,7 @@ function JobSearch() {
         ? prev[category].includes(value)
           ? prev[category].filter((item) => item !== value)
           : [...prev[category], value]
-        : value,
+        : value
     }));
   };
 
@@ -53,30 +96,23 @@ function JobSearch() {
     setSortNewest(!sortNewest);
   };
 
-  //  search on job title and if not then on company location jobType location
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value.trim() || "");
-    let searchString = e.target.value.trim();
-    let filtered = jobs.filter((job) => {
-      const jobTitle = job.title
-        .toLowerCase()
-        .includes(searchString.toLowerCase());
-      const jobCompany = job.company
-        .toLowerCase()
-        .includes(searchString.toLowerCase());
-      const jobLocation = job.location
-        .toLowerCase()
-        .includes(searchString.toLowerCase());
-      const jobType = job.jobType
-        .toLowerCase()
-        .includes(searchString.toLowerCase());
+    let searchString = e.target.value.trim().toLowerCase();
 
-      return jobTitle || jobCompany || jobLocation || jobType;
+    let filtered = jobs.filter((job) => {
+      return (
+        job.designation.toLowerCase().includes(searchString) ||
+        job.comp_desc.toLowerCase().includes(searchString) ||
+        (job.job_location || "").toLowerCase().includes(searchString) ||
+        job.job_type.toLowerCase().includes(searchString)
+      );
     });
 
     setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
   };
 
+  
   return (
     <>
       <Navbar />
@@ -84,7 +120,7 @@ function JobSearch() {
         {/* Filters Section */}
         <aside className="filters-section">
           <div className="filter-group">
-            <h3 className="filter-title">Minimum salary</h3>
+            <h3 className="filter-title">Minimum Salary</h3>
             <input
               type="range"
               className="salary-range"
@@ -96,29 +132,32 @@ function JobSearch() {
             />
             <p>from ₹{filters.salary.toLocaleString()}</p>
           </div>
-
-          {/* removing this temporary 
           <div className="filter-group">
-            <h3 className="filter-title">Disability Type</h3>
-            <div className="filter-options">
-              {[
-                "Visual Impairment",
-                "Hearing Impairment",
-                "Physical Disability",
-                "Cognitive Disability",
-              ].map((type) => (
-                <div className="checkbox-group" key={type}>
-                  <input
-                    type="checkbox"
-                    id={type}
-                    checked={filters.disabilityType.includes(type)}
-                    onChange={() => handleFilterChange("disabilityType", type)}
-                  />
-                  <label htmlFor={type}>{type}</label>
-                </div>
-              ))}
-            </div>
-          </div> */}
+            <h3 className="filter-title">Job Type</h3>
+            {jobTypes.map((type) => (
+              <label key={type.id}>
+                <input
+                  type="checkbox"
+                  value={type.name}
+                  onChange={() => handleFilterChange("jobType", type.name)}
+                />
+                {type.name}
+              </label>
+            ))}
+          </div>
+          <div className="filter-group">
+            <h3 className="filter-title">Job Category</h3>
+            {disabilityCategories.map((category) => (
+              <label key={category.disabilityCatId}>
+                <input
+                  type="checkbox"
+                  value={category.disabilityCatName}
+                  onChange={() => handleFilterChange("jobCategory", category.disabilityCatName)}
+                />
+                {category.disabilityCatName}
+              </label>
+            ))}
+          </div>
         </aside>
 
         {/* Main Content */}
@@ -140,39 +179,16 @@ function JobSearch() {
 
           <div className="jobs-grid">
             {filteredJobs.map((job) => (
-              <>
-                <div className="job-card">
-                  <h3 className="job-title">{job.title}</h3>
-                  <p className="company-name">{job.company}</p>
-
-                  <div className="job-info">
-                    <div className="info-item">
-                      <IndianRupee size={16} />
-                      <span>
-                        ₹{job.minSalary.toLocaleString()} - ₹
-                        {job.maxSalary.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="info-item">
-                      <Briefcase size={16} />
-                      <span>
-                        {job.minExperience} - {job.maxExperience} years
-                      </span>
-                    </div>
-                    <div className="info-item">
-                      <Calendar size={16} />
-                      <span>Deadline: {job.deadline}</span>
-                    </div>
-                  </div>
-
-                  <div className="job-meta">
-                    <span className="location"><Chip label={job.location} variant="outlined" /> </span>
-                    <span className="job-type"><Chip label={job.jobType} variant="outlined" /> </span>
-                  </div>
-
-                  <button className="apply-btn" onClick={() => navigate("/applyJobs")}>View Details</button>
-                </div>
-              </>
+              <JobCard
+                key={job.job_post_id}
+                title={job.designation}
+                company={job.comp_desc}
+                jobType={(job.job_type)}
+                category={job.job_category}
+                salaryRange={`₹${job.min_sal.toLocaleString()} - ₹${job.max_sal.toLocaleString()}`}
+                experience={`${job.min_exp} - ${job.max_exp} years`}
+                deadline={new Date(job.deadline).toLocaleDateString()}
+              />
             ))}
           </div>
         </main>
@@ -182,6 +198,3 @@ function JobSearch() {
 }
 
 export default JobSearch;
-
-
-

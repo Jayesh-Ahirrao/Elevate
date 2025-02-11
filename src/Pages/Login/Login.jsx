@@ -15,7 +15,7 @@ const Login = () => {
   const { setUser, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -27,10 +27,10 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(`${config.url.home}/login`, {
+      const response = await fetch(`${config.url.login}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password })
       });
 
       if (!response.ok) {
@@ -45,30 +45,29 @@ const Login = () => {
       const { token, jobSeeker, employer, admin } = responseData;
 
       let userData = admin || employer || jobSeeker;
-      
+
       if (!token || !userData) {
-          throw new Error("Missing token or user data in response");
+        throw new Error("Missing token or user data in response");
       }
-      
-      
+
       // Save user data in localStorage
       localStorage.setItem("userData", JSON.stringify({ token, userData }));
       localStorage.setItem("userRole", userData.roleName);
       localStorage.setItem("isLoggedIn", "true");
-      
+
       setUser(userData);
       setIsLoggedIn(true);
-      
+
       // Redirect based on role
       if (userData.roleName === "ADMIN") {
-          navigate("/analytics");
+        navigate("/analytics");
       } else if (userData.roleName === "EMPLOYER") {
-          navigate("/dashboard");
+        navigate("/dashboard");
       } else if (userData.roleName === "JOBSEEKER") {
-          navigate("/landing");
+        navigate("/landing");
       } else {
-          navigate("/");
-      }      
+        navigate("/");
+      }
     } catch (error) {
       setError(error.message || "Login failed. Try again.");
     } finally {
@@ -86,7 +85,7 @@ const Login = () => {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
             />
           </div>
@@ -95,7 +94,7 @@ const Login = () => {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
             />
           </div>
@@ -104,16 +103,15 @@ const Login = () => {
             className={styles.loginButton}
             disabled={loading}
           >
-            {loading ? <LoadingCircle/> : "Login"}
+            {loading ? <LoadingCircle /> : "Login"}
           </button>
         </form>
 
         {/* Show progress indicator below the button when loading */}
-        {loading && (
+        {loading &&
           <div className={styles.loadingWrapper}>
-            <LoadingCircle/>
-          </div>
-        )}
+            <LoadingCircle />
+          </div>}
 
         <p className="registrationLink">
           New here? <Link to="/register">Register</Link>
@@ -121,7 +119,10 @@ const Login = () => {
         <p className="forgotPassword">
           <Link to="/forgot-password">Forgot Password?</Link>
         </p>
-        {error && <p className={styles.error}>{error}</p>}
+        {error &&
+          <p className={styles.error}>
+            {error}
+          </p>}
       </div>
     </div>
   );

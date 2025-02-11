@@ -48,7 +48,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchJobTypes = async () => {
       try {
-        const response = await fetch("http://localhost:8052/api/job-types/all");
+        const response = await fetch(config.url.allJobTypes);
         if (!response.ok) throw new Error("Failed to fetch job types");
 
         const data = await response.json();
