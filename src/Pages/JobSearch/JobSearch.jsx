@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./JobSearch.css";
 import Navbar from "../LandingPage/Navbar/Navbar";
 import { fetchJobs } from "../../api/jobPost";
-import { Briefcase, Calendar, GraduationCap, GraduationCapIcon, IndianRupee } from "lucide-react";
+import { Briefcase, Calendar, IndianRupee } from "lucide-react";
 import { Chip } from "@mui/material";
 
 function JobSearch() {
@@ -25,57 +25,12 @@ function JobSearch() {
     fetchData();
   }, []);
 
-  // as jobs cganges write use effect to filter the jobs and set it in fitered jobs
-  // useEffect(() => {
-  //   let filtered = jobs.filter((job) => {
-  //     const jobSalary = parseInt(job.salary);
-  //     const jobExperience = filters.experience.length
-  //       ? job.experience.some((exp) => filters.experience.includes(exp))
-  //       : true;
-  //     const jobQualification = filters.qualification.length
-  //       ? job.qualification.some((qual) => filters.qualification.includes(qual))
-  //       : true;
-  //     const jobDisabilityType = filters.disabilityType.length
-  //       ? job.disabilityType.some((dis) => filters.disabilityType.includes(dis))
-  //       : true;
-
-  //     return (
-  //       jobSalary <= filters.salary &&
-  //       jobExperience &&
-  //       jobQualification &&
-  //       jobDisabilityType
-  //     );
-  //   });
-
-  //   setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
-  // }, [jobs, filters, sortNewest]);
-
-  // obj for ref
-  // {
-  //   id: 1,
-  //   title: "Software Developer",
-  //   company: "Tech Solutions Inc.",
-  //   location: "Remote",
-  //   type: "Full-Time",
-  //   minExperience: 2,
-  //   maxExperience: 4,
-  //   minSalary: 45000,
-  //   maxSalary: 65000,
-  //   qualification: "Bachelors",
-  //   deadline: "2024-04-10",
-  //   postedDate: "2024-03-10"
-  // },
-
   useEffect(() => {
     // filter jobs based on these
     let filtered = jobs.filter((job) => {
       const jobSalary = parseInt(job.maxSalary);
 
-      const jobQualification = filters.qualification.length
-        ? filters.qualification.some((qual) => qual == job.qualification)
-        : true;
-
-      return jobSalary >= filters.salary && jobQualification;
+      return jobSalary >= filters.salary;
     });
 
     setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
@@ -96,7 +51,7 @@ function JobSearch() {
     setSortNewest(!sortNewest);
   };
 
-  //  search on job title and if not then on company location quaification location
+  //  search on job title and if not then on company location jobType location
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value.trim() || "");
     let searchString = e.target.value.trim();
@@ -110,11 +65,11 @@ function JobSearch() {
       const jobLocation = job.location
         .toLowerCase()
         .includes(searchString.toLowerCase());
-      const jobQualification = job.qualification
+      const jobType = job.jobType
         .toLowerCase()
         .includes(searchString.toLowerCase());
 
-      return jobTitle || jobCompany || jobLocation || jobQualification;
+      return jobTitle || jobCompany || jobLocation || jobType;
     });
 
     setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
@@ -138,23 +93,6 @@ function JobSearch() {
               onChange={(e) => handleFilterChange("salary", e.target.value)}
             />
             <p>from ₹{filters.salary.toLocaleString()}</p>
-          </div>
-
-          <div className="filter-group">
-            <h3 className="filter-title">Qualification</h3>
-            <div className="filter-options">
-              {["Bachelors", "Masters", "PhD", "Diploma"].map((qual) => (
-                <div className="checkbox-group" key={qual}>
-                  <input
-                    type="checkbox"
-                    id={qual}
-                    checked={filters.qualification.includes(qual)}
-                    onChange={() => handleFilterChange("qualification", qual)}
-                  />
-                  <label htmlFor={qual}>{qual}</label>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* removing this temporary 
@@ -227,10 +165,7 @@ function JobSearch() {
 
                   <div className="job-meta">
                     <span className="location"><Chip label={job.location} variant="outlined" /> </span>
-                    <span className="job-type"><Chip label={job.type} variant="outlined" /> </span>
-                    <span className="qualification">
-                      <Chip label={job.qualification}  onClick={() => {}} icon={<GraduationCapIcon size={18} />}  Filled/>
-                    </span>
+                    <span className="job-type"><Chip label={job.jobType} variant="outlined" /> </span>
                   </div>
 
                   <button className="apply-btn">View Details</button>

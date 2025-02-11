@@ -2,6 +2,7 @@
 .job-search-container {
   display: flex;
   gap: 2rem;
+  margin-top: 2rem;
   padding: 2rem;
   background-color: #fff;
   min-height: 100vh;
@@ -55,6 +56,7 @@
 .salary-range {
   width: 100%;
   margin: 10px 0;
+  color: #38bff0 !important;
 }
 
 /* Main Content */

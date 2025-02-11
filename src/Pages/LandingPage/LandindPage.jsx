@@ -22,8 +22,8 @@ function LandingPage() {
     {
       title: "Software Developer",
       company: "Tech Corp",
-      location: "Remote",
-      type: "Full-time",
+      jobType: "Remote",
+      category: "Visual Impairment",
       salaryRange: "8-12 LPA",
       experience: "2-4 years",
       deadline: "Mar 30, 2024",
@@ -31,8 +31,8 @@ function LandingPage() {
     {
       title: "Customer Service",
       company: "Service Inc",
-      location: "Bangalore",
-      type: "Part-time",
+      jobType: "Work from home",
+      category: "Physical Impairment",
       salaryRange: "3-5 LPA",
       experience: "1-2 years",
       deadline: "Mar 25, 2024",
@@ -40,8 +40,13 @@ function LandingPage() {
     {
       title: "Data Analyst",
       company: "Data Co",
+<<<<<<< HEAD
       location: "Mumbai",
       type: "Contract", 
+=======
+      jobType: "Remote",
+      category: "Visual Impairment",
+>>>>>>> 0f680830d1736a80fda1c7c8fc5012e6d53ef6d9
       salaryRange: "6-8 LPA",
       experience: "2-3 years",
       deadline: "Apr 5, 2024",

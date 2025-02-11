@@ -5,8 +5,8 @@ import './JobCard.css';
 interface JobCardProps {
   title: string;
   company: string;
-  location: string;
-  type: string;
+  jobType: string;
+  category: string;
   salaryRange: string;
   experience: string;
   deadline: string;
@@ -15,8 +15,8 @@ interface JobCardProps {
 const JobCard = ({ 
   title, 
   company, 
-  location, 
-  type, 
+  jobType, 
+  category, 
   salaryRange, 
   experience, 
   deadline 
@@ -42,8 +42,8 @@ const JobCard = ({
       </div>
 
       <div className="job-meta">
-        <span className="location">{location}</span>
-        <span className="job-type">{type}</span>
+        <span className="location">{jobType}</span>
+        <span className="job-type">{category}</span>
       </div>
       
       <button className="apply-btn">View Details</button>
