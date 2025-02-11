@@ -25,7 +25,9 @@ import {
   Select,
   MenuItem,
   Snackbar,
-  Alert 
+  Alert,
+  FormControl,
+  InputLabel
 } from "@mui/material";
 import { Edit as EditIcon, Close as CloseIcon } from "@mui/icons-material";
 
@@ -33,6 +35,7 @@ export default function Dashboard() {
   const { user } = useContext(UserContext);
   const employerId = user?.employer_id;
   const [jobTypes, setJobTypes] = useState([]);
+  
   const [jobs, setJobs] = useState([]);
   const [stats, setStats] = useState({
     totalJobsPosted: 0,
@@ -236,6 +239,51 @@ export default function Dashboard() {
         </Grid>
       </Grid>
 
+      <Box
+        sx={{
+          mb: 3,
+          display: "flex",
+          justifyContent: "space-between",
+          backgroundColor: "#f5f5f5",
+          padding: 2,
+          borderRadius: "8px"
+        }}
+      >
+        {/* Left side: Job Status and Search */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Job Status</InputLabel>
+            <Select defaultValue="all" label="Job Status">
+              <MenuItem value="all">All Jobs</MenuItem>
+              <MenuItem value="openings">Openings</MenuItem>
+              <MenuItem value="closed">Closed Jobs</MenuItem>
+            </Select>
+          </FormControl>
+
+          {/* Search field */}
+          <TextField  
+            label="Search"
+            variant="outlined"
+            size="small"
+            sx={{
+              width: "160px",
+              backgroundColor: "white",
+              borderRadius: "4px",
+              height: "40px",
+              input: { height: "21px" }
+            }}
+          />
+        </Box>
+
+        {/* Right side: Sort By */}
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel>Sort By</InputLabel>
+          <Select defaultValue="newest" label="Sort By">
+            <MenuItem value="newest">Newest</MenuItem>
+            <MenuItem value="oldest">Oldest</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
       {/* Jobs Table */}
       <TableContainer
         component={Paper}
