@@ -1,67 +1,60 @@
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Slider from "react-slick"; // Import carousel
 import Navbar from "../LandingPage/Navbar/Navbar";
 import JobCard from "../LandingPage/JobCard/JobCard";
 import Footer from "../LandingPage/Footer/Footer";
 import "./LandingPage.css";
 import { useContext } from "react";
+import { fetchJobs } from "../../api/jobPost";
 import { UserContext } from "../../App";
-
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css"; 
 
 function LandingPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  // Using fallback to ensure we always have a value for isEmployer
-  const isEmployer = location.state?.isEmployer || false; // Defaulting to false if undefined
+  const isEmployer = location.state?.isEmployer || false;
   const isJobSeeker = location.state?.isJobSeeker || false;
-  console.log("isEmployer:", isEmployer); // Debugging log to check the state value
+  console.log("isEmployer:", isEmployer);
   console.log("isJobSeeker", isJobSeeker);
 
-  const featuredJobs = [
-    {
-      title: "Software Developer",
-      company: "Tech Corp",
-      jobType: "Remote",
-      category: "Visual Impairment",
-      salaryRange: "8-12 LPA",
-      experience: "2-4 years",
-      deadline: "Mar 30, 2024",
-    },
-    {
-      title: "Customer Service",
-      company: "Service Inc",
-      jobType: "Work from home",
-      category: "Physical Impairment",
-      salaryRange: "3-5 LPA",
-      experience: "1-2 years",
-      deadline: "Mar 25, 2024",
-    },
-    {
-      title: "Data Analyst",
-      company: "Data Co",
-<<<<<<< HEAD
-      location: "Mumbai",
-      type: "Contract", 
-=======
-      jobType: "Remote",
-      category: "Visual Impairment",
->>>>>>> 0f680830d1736a80fda1c7c8fc5012e6d53ef6d9
-      salaryRange: "6-8 LPA",
-      experience: "2-3 years",
-      deadline: "Apr 5, 2024",
-    },
-  ];
+  const [jobs, setJobs] = useState([]);
 
-  const handlePostJobClick = () => {
-    console.log("Post job button clicked");
-    if (isEmployer) {
-      console.log("Navigating to dashboard");
-      // If user is employer, navigate to the employer dashboard
-      navigate("/dashboard");
-    } else {
-      alert("You need to be an employer to post a job.");
-    }
+  useEffect(() => {
+    const loadJobs = async () => {
+      const fetchedJobs = await fetchJobs();
+      setJobs(fetchedJobs);
+    };
+    loadJobs();
+  }, []);
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // Show 3 cards at a time
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
@@ -75,8 +68,7 @@ function LandingPage() {
           </h1>
           <p>Empowering careers, embracing abilities</p>
           <div className="cta-buttons">
-            {}
-            {user?.roleName == "JOBSEEKER" ? (
+            {user?.roleName === "JOBSEEKER" ? (
               <button
                 onClick={() => navigate("/search")}
                 className="btn btn-primary"
@@ -86,7 +78,7 @@ function LandingPage() {
             ) : (
               <button
                 className="btn btn-secondary"
-                onClick={() => navigate("/login")} // Handle "Post Job" click
+                onClick={() => navigate("/login")}
               >
                 Get started
               </button>
@@ -96,44 +88,46 @@ function LandingPage() {
 
         <section className="featured-jobs">
           <h2>Featured Jobs</h2>
-          <div className="job-grid">
-            {featuredJobs.map((job, index) => (
-              <JobCard key={index} {...job} />
-            ))}
-          </div>
+          {jobs.length > 0 ? (
+            <Slider {...settings}>
+              {jobs.map((job) => (
+                <JobCard
+                  key={job.job_post_id}
+                  title={job.designation}
+                  company={job.comp_desc}
+                  jobType={job.job_type.replace(/_/g, " ")}
+                  category={job.job_category || "General"}
+                  salaryRange={`${(job.min_sal / 1000).toFixed(1)}K - ${(job.max_sal / 1000).toFixed(1)}K`}
+                  experience={`${job.min_exp} - ${job.max_exp} years`}
+                  deadline={new Date(job.deadline).toLocaleDateString()}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <p>Loading jobs...</p>
+          )}
         </section>
 
         <section className="info-section">
           <h2>
             Why Choose{" "}
-            <span
-              style={{ letterSpacing: "-3px", fontFamily: "League Spartan" }}
-            >
+            <span style={{ letterSpacing: "-3px", fontFamily: "League Spartan" }}>
               elevate
-            </span>{" "}
+            </span>
             ?
           </h2>
           <div className="info-grid">
             <div className="info-card">
               <h3>Inclusive Opportunities</h3>
-              <p>
-                We partner with companies committed to creating an inclusive
-                workplace.
-              </p>
+              <p>We partner with companies committed to creating an inclusive workplace.</p>
             </div>
             <div className="info-card">
               <h3>Accessible Platform</h3>
-              <p>
-                Our platform is designed with accessibility in mind, ensuring a
-                seamless experience for all users.
-              </p>
+              <p>Our platform is designed with accessibility in mind, ensuring a seamless experience for all users.</p>
             </div>
             <div className="info-card">
               <h3>Support Network</h3>
-              <p>
-                Connect with a community that understands and supports your
-                career journey.
-              </p>
+              <p>Connect with a community that understands and supports your career journey.</p>
             </div>
           </div>
         </section>
@@ -145,9 +139,7 @@ function LandingPage() {
               us :)
             </span>
           </h2>
-          <p>
-            we're committed to breaking down barriers and building up talents.
-          </p>
+          <p>We're committed to breaking down barriers and building up talents.</p>
         </section>
       </main>
 
