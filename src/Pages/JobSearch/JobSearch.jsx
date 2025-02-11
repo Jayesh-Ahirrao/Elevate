@@ -3,7 +3,7 @@ import "./JobSearch.css";
 import Navbar from "../LandingPage/Navbar/Navbar";
 import { fetchJobs } from "../../api/jobPost";
 import JobCard from "../LandingPage/JobCard/JobCard";
-import config from "../../Config"
+import config from "../../Config";
 
 function JobSearch() {
   const [sortNewest, setSortNewest] = useState(true);
@@ -11,7 +11,7 @@ function JobSearch() {
   const [filters, setFilters] = useState({
     salary: 50000,
     disabilityType: [],
-    jobType: [],
+    jobType: [], // Stores job types like "WORK_FROM_HOME"
     jobCategory: []
   });
 
@@ -38,7 +38,8 @@ function JobSearch() {
     const fetchDisabilityCategory = async () => {
       try {
         const response = await fetch(config.url.allDisCat);
-        if (!response.ok) throw new Error("Failed to fetch disability categories");
+        if (!response.ok)
+          throw new Error("Failed to fetch disability categories");
         const data = await response.json();
         console.log("Fetched disability categories:", data);
         setDisabilityCategories(data);
@@ -55,7 +56,8 @@ function JobSearch() {
         const response = await fetch(config.url.allJobTypes);
         if (!response.ok) throw new Error("Failed to fetch job types");
         const data = await response.json();
-        setJobTypes(data);
+        console.log("Fetched job types:", data);
+        setJobTypes(data); // Setting the job types array: ["WORK_FROM_OFFICE", "WORK_FROM_HOME", "HYBRID"]
       } catch (error) {
         console.error("Error fetching job types:", error);
       }
@@ -73,8 +75,14 @@ function JobSearch() {
       const matchesJobType =
         filters.jobType.length === 0 || filters.jobType.includes(job.job_type);
       const matchesJobCategory =
-        filters.jobCategory.length === 0 || filters.jobCategory.includes(job.job_category);
-      return matchesSalary && matchesDisabilityType && matchesJobType && matchesJobCategory;
+        filters.jobCategory.length === 0 ||
+        filters.jobCategory.includes(job.job_category);
+      return (
+        matchesSalary &&
+        matchesDisabilityType &&
+        matchesJobType &&
+        matchesJobCategory
+      );
     });
     setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
   }, [jobs, filters, sortNewest]);
@@ -110,7 +118,6 @@ function JobSearch() {
     setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
   };
 
-  
   return (
     <>
       <Navbar />
@@ -130,32 +137,41 @@ function JobSearch() {
             />
             <p>from ₹{filters.salary.toLocaleString()}</p>
           </div>
+
           <div className="filter-group">
-            <h3 className="filter-title">Job Type</h3>
-            {jobTypes.map((type) => (
-              <label key={type.id}>
-                <input
-                  type="checkbox"
-                  value={type.name}
-                  onChange={() => handleFilterChange("jobType", type.name)}
-                />
-                {type.name}
-              </label>
-            ))}
-          </div>
-          <div className="filter-group">
-            <h3 className="filter-title">Job Category</h3>
-            {disabilityCategories.map((category) => (
-              <label key={category.disabilityCatId}>
-                <input
-                  type="checkbox"
-                  value={category.disabilityCatName}
-                  onChange={() => handleFilterChange("jobCategory", category.disabilityCatName)}
-                />
-                {category.disabilityCatName}
-              </label>
-            ))}
-          </div>
+  <h3 className="filter-title">Job Type</h3>
+  <div className="filter-options">
+    {jobTypes.map((type) => (
+      <label key={type}>
+        <input
+          type="checkbox"
+          value={type}
+          checked={filters.jobType.includes(type)}
+          onChange={() => handleFilterChange("jobType", type)}
+        />
+        {type.replace(/_/g, " ")}
+      </label>
+    ))}
+  </div>
+</div>
+
+
+<div className="filter-group">
+  <h3 className="filter-title">Job Category</h3>
+  <div className="filter-options">
+    {disabilityCategories.map((category) => (
+      <label key={category.disabilityCatId}>
+        <input
+          type="checkbox"
+          value={category.disabilityCatName}
+          checked={filters.jobCategory.includes(category.disabilityCatName)}
+          onChange={() => handleFilterChange("jobCategory", category.disabilityCatName)}
+        />
+        {category.disabilityCatName}
+      </label>
+    ))}
+  </div>
+</div>
         </aside>
 
         {/* Main Content */}
@@ -176,18 +192,22 @@ function JobSearch() {
           </div>
 
           <div className="jobs-grid">
-            {filteredJobs.map((job) => (
-              <JobCard
-                key={job.job_post_id}
-                title={job.designation}
-                company={job.comp_desc}
-                jobType={(job.job_type)}
-                category={job.job_category}
-                salaryRange={`₹${job.min_sal.toLocaleString()} - ₹${job.max_sal.toLocaleString()}`}
-                experience={`${job.min_exp} - ${job.max_exp} years`}
-                deadline={new Date(job.deadline).toLocaleDateString()}
-              />
-            ))}
+            {filteredJobs.length > 0 ? (
+              filteredJobs.map((job) => (
+                <JobCard
+                  key={job.job_post_id}
+                  title={job.designation}
+                  company={job.comp_desc}
+                  jobType={job.job_type.replace(/_/g, " ")}
+                  category={job.job_category}
+                  salaryRange={`₹${job.min_sal.toLocaleString()} - ₹${job.max_sal.toLocaleString()}`}
+                  experience={`${job.min_exp} - ${job.max_exp} years`}
+                  deadline={new Date(job.deadline).toLocaleDateString()}
+                />
+              ))
+            ) : (
+              <p className="no-jobs">No jobs found matching the criteria.</p>
+            )}
           </div>
         </main>
       </div>
