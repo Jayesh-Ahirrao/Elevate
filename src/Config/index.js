@@ -1,7 +1,6 @@
 // export a config object for cofigured api end point as localhost as of now
 
-
-const baseURL = "http://localhost:8081";
+const baseURL = "http://localhost:8080";
 const dotnetURL = "https://localhost:7038/Admin";
 const authURL = "http://localhost:8081/api/auth";
 const jpmURL = "http://localhost:8052/api/jpm";

@@ -41,7 +41,7 @@ function LandingPage() {
       title: "Data Analyst",
       company: "Data Co",
       location: "Mumbai",
-      type: "Contract",
+      type: "Contract", 
       salaryRange: "6-8 LPA",
       experience: "2-3 years",
       deadline: "Apr 5, 2024",
