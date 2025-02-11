@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./JobSearch.css";
 import Navbar from "../LandingPage/Navbar/Navbar";
 import { fetchJobs } from "../../api/jobPost";
@@ -6,6 +7,7 @@ import JobCard from "../LandingPage/JobCard/JobCard";
 import config from "../../Config";
 
 function JobSearch() {
+  const navigate = useNavigate();
   const [sortNewest, setSortNewest] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({

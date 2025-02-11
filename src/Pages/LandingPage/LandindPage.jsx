@@ -38,7 +38,7 @@ function LandingPage() {
     slidesToShow: 3, // Show 3 cards at a time
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 2500,
     responsive: [
       {   
         breakpoint: 1024,

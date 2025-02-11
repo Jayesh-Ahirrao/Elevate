@@ -382,7 +382,17 @@ const JobSeekerForm = ({ formData, onUpdateForm, step }) => {
                   inputProps={{ min: 0, max: 45 }}
                 />
               </Grid>
+
             </Grid>
+            <TextField
+              fullWidth
+              label="Resume (Drive Link)"
+              type="text"
+              value={formData.resume || ""}
+              onChange={(e) => onUpdateForm("resume", e.target.value)}
+              margin="normal"
+              required
+            />
             <FormControl fullWidth margin="normal">
               <InputLabel>Skills</InputLabel>
               <Select

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, IndianRupee, Briefcase } from 'lucide-react';
 import './JobCard.css';
+import { useNavigate } from 'react-router-dom';
 
 interface JobCardProps {
   title: string;
@@ -21,6 +22,8 @@ const JobCard = ({
   experience, 
   deadline 
 }: JobCardProps) => {
+  const navigate = useNavigate(); // Initialize navigate function
+
   return (
     <div className="job-card">
       <h3 className="job-title">{title}</h3>
@@ -46,7 +49,7 @@ const JobCard = ({
         <span className="job-type">{category}</span>
       </div>
       
-      <button className="apply-btn">View Details</button>
+      <button className="apply-btn" onClick={() => navigate("/applyJobs")}>View Details</button>
     </div>
   );
 };
