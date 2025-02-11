@@ -69,13 +69,13 @@ function JobSearch() {
   useEffect(() => {
     // filter jobs based on these
     let filtered = jobs.filter((job) => {
-      const jobSalary = parseInt(job.minSalary);
+      const jobSalary = parseInt(job.maxSalary);
 
       const jobQualification = filters.qualification.length
         ? filters.qualification.some((qual) => qual == job.qualification)
         : true;
 
-      return jobSalary <= filters.salary && jobQualification;
+      return jobSalary >= filters.salary && jobQualification;
     });
 
     setFilteredJobs(sortNewest ? [...filtered] : [...filtered].reverse());
@@ -137,7 +137,7 @@ function JobSearch() {
               value={filters.salary}
               onChange={(e) => handleFilterChange("salary", e.target.value)}
             />
-            <p>Up to ₹{filters.salary.toLocaleString()}</p>
+            <p>from ₹{filters.salary.toLocaleString()}</p>
           </div>
 
           <div className="filter-group">
@@ -233,7 +233,7 @@ function JobSearch() {
                     </span>
                   </div>
 
-                  <button className="apply-btn">Apply Now</button>
+                  <button className="apply-btn">View Details</button>
                 </div>
               </>
             ))}
@@ -245,3 +245,6 @@ function JobSearch() {
 }
 
 export default JobSearch;
+
+
+
