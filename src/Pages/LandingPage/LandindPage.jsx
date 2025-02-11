@@ -3,10 +3,14 @@ import Navbar from "../LandingPage/Navbar/Navbar";
 import JobCard from "../LandingPage/JobCard/JobCard";
 import Footer from "../LandingPage/Footer/Footer";
 import "./LandingPage.css";
+import { useContext } from "react";
+import { UserContext } from "../../App";
+
 
 function LandingPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const {user} = useContext(UserContext);
 
   // Using fallback to ensure we always have a value for isEmployer
   const isEmployer = location.state?.isEmployer || false; // Defaulting to false if undefined
@@ -66,13 +70,22 @@ function LandingPage() {
           </h1>
           <p>Empowering careers, embracing abilities</p>
           <div className="cta-buttons">
-            <button className="btn btn-primary">Find Jobs</button>
-            <button
-              className="btn btn-secondary"
-              onClick={handlePostJobClick} // Handle "Post Job" click
-            >
-              Post a Job
-            </button>
+            {}
+            {user?.roleName == "JOBSEEKER" ? (
+              <button
+                onClick={() => navigate("/search")}
+                className="btn btn-primary"
+              >
+                Find Jobs
+              </button>
+            ) : (
+              <button
+                className="btn btn-secondary"
+                onClick={() => navigate("/login")} // Handle "Post Job" click
+              >
+                Get started
+              </button>
+            )}
           </div>
         </section>
 

@@ -46,7 +46,7 @@ const JobCard = ({
         <span className="job-type">{type}</span>
       </div>
       
-      <button className="apply-btn">Apply Now</button>
+      <button className="apply-btn">View Details</button>
     </div>
   );
 };

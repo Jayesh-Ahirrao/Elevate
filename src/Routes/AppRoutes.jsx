@@ -15,6 +15,7 @@ import { UserContext } from "../App";
 import AdminDLayout from "../components/AdminDLayout";
 import Employers from "../Pages/admin/Employer";
 import JobSeekers from "../Pages/admin/JobSeekers";
+import JobSearch from "../Pages/JobSearch/JobSearch";
 
 const AppRoutes = () => {
   const { user, isLoggedIn } = useContext(UserContext);
@@ -51,6 +52,7 @@ const AppRoutes = () => {
       {role === "JOBSEEKER" && (
         <>
           <Route path="/landing" element={<LandingPage />} />
+          <Route path="/search" element={<JobSearch />} />
           <Route path="/*" element={<Navigate to="/landing" />} />
         </>
       )}
