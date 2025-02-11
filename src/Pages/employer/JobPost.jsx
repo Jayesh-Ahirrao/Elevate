@@ -34,6 +34,7 @@
     const [jobTypes, setJobTypes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [errors, setErrors] = useState({});
     const [employerId, setEmployerId] = useState(null);
 
     const navigate = useNavigate();
@@ -108,15 +109,67 @@
       fetchJobTypes();
     }, []);
 
+    const validateForm = () => {
+      let newErrors = {};
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const minDeadline = tomorrow.toISOString().split("T")[0]; // Convert to YYYY-MM-DD
+  
+      // Required fields
+      Object.keys(formData).forEach((key) => {
+        if (!formData[key]) newErrors[key] = "This field is required";
+      });
+  
+      // Experience Validation
+      if (formData.min_exp < 0) newErrors.min_exp = "Experience must be a positive value";
+      if (formData.max_exp < 0) newErrors.max_exp = "Experience must be a positive value";
+      if (formData.min_exp && formData.max_exp && Number(formData.min_exp) > Number(formData.max_exp)) {
+        newErrors.min_exp = "Min experience cannot be greater than max experience";
+      }
+  
+      // Salary Validation
+      if (formData.min_sal < 0) newErrors.min_sal = "Salary must be a positive value";
+      if (formData.max_sal < 0) newErrors.max_sal = "Salary must be a positive value";
+      if (formData.min_sal && formData.max_sal && Number(formData.min_sal) > Number(formData.max_sal)) {
+        newErrors.min_sal = "Min salary cannot be greater than max salary";
+      }
+  
+      // Deadline Validation
+      if (formData.deadline && formData.deadline < minDeadline) {
+        newErrors.deadline = `Deadline must be at least ${minDeadline}`;
+      }
+  
+      // Number of Rounds Validation
+      if (formData.no_of_rounds < 1) {
+        newErrors.no_of_rounds = "Number of rounds must be at least 1";
+      }
+  
+      // Select fields validation
+      if (!formData.job_type) newErrors.job_type = "Please select a job type";
+      if (!formData.job_category) newErrors.job_category = "Please select a job category";
+      if (!formData.cityId) newErrors.cityId = "Please select a city";
+  
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    };
+  
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({
         ...prev,
         [name]: value
       }));
+      setErrors((prev) => ({
+        ...prev,
+        [name]: ""
+      }));
     };
+  
+  
 
     const handleSubmit = async () => {
+      if (!validateForm()) return;  
       console.log("Form data:", formData);
 
       if (!employerId) {
@@ -183,6 +236,8 @@
                 name="designation"
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.designation}
+              helperText={errors.designation}
               />
             </Grid>
             <Grid item xs={12}>
@@ -194,6 +249,8 @@
                 rows={2}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.job_desc}
+                helperText={errors.job_desc}
               />
             </Grid>
             <Grid item xs={6}>
@@ -204,6 +261,7 @@
                 onChange={handleChange}
                 displayEmpty
                 variant="outlined"
+                error={!!errors.job_type}
               >
                 <MenuItem value="" disabled>
                   Select Job Type
@@ -214,6 +272,9 @@
                   </MenuItem>
                 ))}
               </Select>
+              {errors.job_type && (
+              <Typography color="error">{errors.job_type}</Typography>
+            )}
             </Grid>
             <Grid item xs={6}>
               <Select
@@ -224,6 +285,7 @@
                 displayEmpty
                 variant="outlined"
                 sx={{ mb: 2 }}
+                error={!!errors.job_category}
               >
                 <MenuItem value="" disabled>
                   Select Disability Category
@@ -239,6 +301,9 @@
                     </MenuItem>
                   ))}
               </Select>
+              {errors.job_category && (
+              <Typography color="error">{errors.job_category}</Typography>
+            )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -249,6 +314,8 @@
                 name="comp_desc"
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.comp_desc}
+              helperText={errors.comp_desc}
               />
             </Grid>
             <Grid item xs={6}>
@@ -259,6 +326,8 @@
                 type="number"
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.min_exp}
+                helperText={errors.min_exp}
               />
             </Grid>
             <Grid item xs={6}>
@@ -269,6 +338,8 @@
                 type="number"
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.max_exp}
+                helperText={errors.max_exp}
               />
             </Grid>
             <Grid item xs={6}>
@@ -279,6 +350,8 @@
                 type="number"
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.min_sal}
+              helperText={errors.min_sal}
               />
             </Grid>
             <Grid item xs={6}>
@@ -289,6 +362,8 @@
                 type="number"
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.max_sal}
+                helperText={errors.max_sal}
               />
             </Grid>
             <Grid item xs={6}>
@@ -299,6 +374,8 @@
                 type="number"
                 onChange={handleChange}
                 variant="outlined"
+                helperText={errors.no_of_rounds}
+                inputProps={{ min: 1, step: 1 }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -306,11 +383,10 @@
                 fullWidth
                 name="cityId"
                 value={formData.cityId}
-                onChange={(e) =>
-                  setFormData({ ...formData, cityId: e.target.value })
-                }
+                onChange={handleChange}
                 displayEmpty
                 variant="outlined"
+                error={!!errors.cityId}
               >
                 <MenuItem value="" disabled>
                   Select City
@@ -321,6 +397,9 @@
                   </MenuItem>
                 ))}
               </Select>
+              {errors.cityId && (
+              <Typography color="error">{errors.cityId}</Typography>
+            )}
             </Grid>
             <Grid item xs={12}>
               <TextField  
@@ -332,6 +411,8 @@
                 onChange={handleChange}
                 variant="outlined"
                 sx={{ mb: 2 }}
+                error={!!errors.detailed_address}
+              helperText={errors.detailed_address}
               />
             </Grid>
             <Grid item xs={6}>
@@ -343,6 +424,9 @@
                 InputLabelProps={{ shrink: true }}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errors.deadline}
+              helperText={errors.deadline}
+
               />
             </Grid>
 
