@@ -132,23 +132,14 @@ function Register() {
         throw new Error("Invalid role");
       }
 
-      const username =
-        state.role === config.roles.employer
-          ? state.formData.employerFormData.fname
-          : state.formData.jobseekerFormData.fname;
-
-      setUser({ ...responseData, fname: username });
-      setIsLoggedIn(true);
-
-      setSuccessMessage("Registration successful! A welcome email has been sent to your email address."); // Display success message
-
+      navigate("/login"); 
       // Redirect to dashboard after short delay
-      setTimeout(() => {
-        console.log("Navigating to home...");
-        navigate("/", {
-          state: { isEmployer: state.role === config.roles.employer }
-        });
-      }, 3000);
+      // setTimeout(() => {
+      //   console.log("Navigating to home...");
+      //   navigate("/", {
+      //     state: { isEmployer: state.role === config.roles.employer }
+      //   });
+      // }, 3000);
       
     } catch (error) {
       console.error("Registration failed:", error);
