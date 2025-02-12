@@ -158,11 +158,11 @@ const Login = () => {
         </form>
 
         {/* Show progress indicator below the button when loading */}
-        {loading && (
+        {/* {loading && (
           <div className={styles.loadingWrapper}>
             <LoadingCircle />
           </div>
-        )}
+        )} */}
 
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
           <p className="registrationLink">

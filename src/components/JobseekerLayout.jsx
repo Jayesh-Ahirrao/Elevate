@@ -104,7 +104,7 @@ export default function JobseekerLayout({ children }) {
     <div>
       <Toolbar>
         <img
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/landing")}
           src={logo}
           alt="Logo"
           style={{
@@ -198,6 +198,7 @@ export default function JobseekerLayout({ children }) {
                     padding: "8px",
                     cursor: "pointer",
                     transition: "0.3s",
+                    "&:hover": { color: "#38bff0" },
                   }}
                   onClick={() => navigate("/landing")}
                 >
@@ -205,9 +206,11 @@ export default function JobseekerLayout({ children }) {
                 </p>
                 <p
                   style={{
-                    padding: "8px",
+                    padding: "12px 24px",
                     cursor: "pointer",
                     transition: "0.3s",
+                    borderRadius: "50px",
+                    
                   }}
                   onClick={() => navigate("/search")}
                 >

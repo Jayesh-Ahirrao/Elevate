@@ -2,6 +2,7 @@ import React from "react";
 import { Calendar, IndianRupee, Briefcase } from "lucide-react";
 import "./JobCard.css";
 import { useNavigate } from "react-router-dom";
+import { Chip } from "@mui/material";
 
 interface JobCardProps {
   title: string;
@@ -68,8 +69,10 @@ const JobCard = ({
       </div>
 
       <div className="job-meta">
-        <span className="location">{jobType}</span>
-        <span className="job-type">{category}</span>
+        <Chip label={jobType} />
+        <Chip label={category} />
+        {/* <span className="location">{jobType}</span>
+        <span className="job-type">{category}</span> */}
       </div>
 
       <button className="apply-btn" onClick={handleViewDetails}>

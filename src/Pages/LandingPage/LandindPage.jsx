@@ -24,6 +24,7 @@ function LandingPage() {
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const loadJobs = async () => {
       const fetchedJobs = await fetchJobs();
       console.log("Fetched Jobs:", fetchedJobs);

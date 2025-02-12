@@ -189,7 +189,7 @@ function JobSearch() {
               <input
                 type="text"
                 className="search-input"
-                placeholder="Search for jobs..."
+                placeholder="Search for designation, company and job type..."
                 value={searchTerm}
                 onChange={handleSearchChange}
               />

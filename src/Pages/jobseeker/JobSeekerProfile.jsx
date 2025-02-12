@@ -44,46 +44,58 @@ export default function JobSeekerProfile() {
   const isValidGoogleDriveLink = link => /^https:\/\/drive\.google\.com\//.test(link);
 
   // Function to update profile
-  const handleProfileUpdate = async e => {
+  const handleProfileUpdate = async (e) => {
     e.preventDefault();
     setProfileError("");
     setProfileSuccess(false);
-
+  
     if (!isValidEmail(jobSeekerInfo.email)) {
       setProfileError("Invalid email format");
       return;
     }
-
+  
     if (!isValidContact(jobSeekerInfo.contact)) {
       setProfileError("Contact number must be 10 digits");
       return;
     }
-
+  
     if (jobSeekerInfo.resumeLink && !isValidGoogleDriveLink(jobSeekerInfo.resumeLink)) {
       setProfileError("Invalid Google Drive link");
       return;
     }
-
+  
     try {
       const response = await fetch(config.url.updateProfile, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: jobSeekerInfo.email,
           contact: jobSeekerInfo.contact,
-          resumeLink: jobSeekerInfo.resumeLink,
-          oldEmail: JSON.parse(localStorage.getItem("userData")).userData.email
-        })
+          resume: jobSeekerInfo.resumeLink, // Ensure correct field name
+          oldEmail: JSON.parse(localStorage.getItem("userData")).userData.email,
+        }),
       });
-
+  
       if (response.ok) {
         setProfileSuccess("Profile updated successfully!");
-        localStorage.setItem(
-          "userData",
-          JSON.stringify({ userData: { ...jobSeekerInfo } })
-        );
+  
+         // Get the existing data from localStorage
+      const storedUserData = JSON.parse(localStorage.getItem("userData"));
+
+      // Update only the userData part without overriding the token
+      const updatedUserData = {
+        ...storedUserData, // Keep the token
+        userData: {
+          ...storedUserData.userData, // Preserve existing userData
+          email: jobSeekerInfo.email,
+          contact: jobSeekerInfo.contact,
+          resume: jobSeekerInfo.resumeLink, // Ensure correct field name
+        },
+      };
+        // Update localStorage with merged data
+        localStorage.setItem("userData", JSON.stringify(updatedUserData ));
       } else {
         setProfileError("Failed to update profile!");
       }
@@ -91,6 +103,7 @@ export default function JobSeekerProfile() {
       setProfileError("An error occurred while updating profile.");
     }
   };
+  
 
   return (
     <Box sx={{ maxWidth: 600, mx: "auto" }}>
