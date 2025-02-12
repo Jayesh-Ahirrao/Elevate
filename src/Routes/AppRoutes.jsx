@@ -17,6 +17,10 @@ import Employers from "../Pages/admin/Employer";
 import JobSeekers from "../Pages/admin/JobSeekers";
 import JobSearch from "../Pages/JobSearch/JobSearch";
 import ApplyJob from "../Pages/ApplyJob/ApplyJob";
+import JobseekerDashboard from "../Pages/jobseeker/JobseekerDashboard";
+import JobseekerLayout from "../components/JobseekerLayout";
+import JobSeekerProfile from "../Pages/jobseeker/JobSeekerProfile";
+import JobsApplied from "../Pages/jobseeker/JobsApplied";
 
 const AppRoutes = () => {
   const { user, isLoggedIn } = useContext(UserContext);
@@ -55,7 +59,9 @@ const AppRoutes = () => {
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/search" element={<JobSearch />} />
           <Route path= "/applyJobs" element={<ApplyJob/>} />
-          <Route path="/*" element={<Navigate to="/landing" />} />
+          <Route path= "/dashboard" element={<JobseekerLayout> <JobsApplied/>  </JobseekerLayout>} />
+          <Route path= "/profile" element={<JobseekerLayout> <JobSeekerProfile/> </JobseekerLayout>} />
+          <Route path="/*" element={<Navigate to="/dashboard" />} />
         </>
       )}
 

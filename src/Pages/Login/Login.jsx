@@ -40,7 +40,7 @@ const Login = () => {
     }`;
 
       const userDataParsed = JSON.parse(jsonString);
-      const {token, userData} = userDataParsed;
+      const { token, userData } = userDataParsed;
 
       localStorage.setItem("userData", JSON.stringify({ token, userData }));
       localStorage.setItem("userRole", userData.roleName);
@@ -79,7 +79,7 @@ const Login = () => {
       const response = await fetch(`${config.url.login}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -118,7 +118,7 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      setError(error.message || "Login failed. Try again.");
+      setError("Login failed. Try again.");
     } finally {
       setLoading(false);
     }
@@ -128,8 +128,8 @@ const Login = () => {
     <div className={styles.loginPageWrapper}>
       <div className={styles.formContainer}>
         <h2 className={styles.title}>Login</h2>
-        {/* <form className={styles.form} onSubmit={handleSubmit}> */}
-        <form className={styles.form} onSubmit={handleDummyLogin}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          {/* <form className={styles.form} onSubmit={handleDummyLogin}> */}
           <div className={styles.inputGroup}>
             <label>Email</label>
             <input
@@ -164,13 +164,15 @@ const Login = () => {
           </div>
         )}
 
-        <p className="registrationLink">
-          New here? <Link to="/register">Register</Link>
-        </p>
-        <p className="forgotPassword">
-          <Link to="/forgot-password">Forgot Password?</Link>
-        </p>
-        {error && <p className={styles.error}>{error}</p>}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+          <p className="registrationLink">
+            New here? <Link to="/register">Register</Link>
+          </p>
+          <p className="forgotPassword">
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
+          {error && <p className={styles.error}>{error}</p>}
+        </div>
       </div>
     </div>
   );

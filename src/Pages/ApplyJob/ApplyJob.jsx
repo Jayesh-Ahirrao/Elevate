@@ -54,9 +54,9 @@ const ApplyJob = () => {
   };
 
   return (
-    <div>
+    <div className="apply-job-page">
       <Navbar />
-      <div className="apply-job-page">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <Container maxWidth="xl" className="apply-job-container">
           <Grid container spacing={3}>
             {/* Left Section - Job Details */}

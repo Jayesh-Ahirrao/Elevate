@@ -16,8 +16,11 @@ import {
   Button,
   Menu,
   MenuItem,
-  CircularProgress
+  CircularProgress,
+  Tooltip,
 } from "@mui/material";
+import WorkIcon from "@mui/icons-material/Work";
+import PersonIcon from "@mui/icons-material/Person";
 
 import {
   Dashboard as DashboardIcon,
@@ -26,15 +29,16 @@ import {
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   Menu as MenuIcon,
-  AccountCircle as AccountCircleIcon
+  AccountCircle as AccountCircleIcon,
 } from "@mui/icons-material";
 
 import { UserContext } from "../App";
 import logo from "../../public/logo.png";
+import UserLoggedinChip from "./UserLoggedinChip";
 
 const drawerWidth = 240;
 
-export default function Layout({ children }) {
+export default function JobseekerLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const { user, setUser, isLoggedIn, setIsLoggedIn } = useContext(UserContext);
@@ -44,17 +48,17 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
-  
+
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
         console.log("Parsed Stored User:", parsedUser);
-  
+
         const { token, userData } = parsedUser; // Fix: Extract userData instead of employer
-  
+
         console.log("Stored Token:", token);
         console.log("Stored User Data:", userData);
-  
+
         if (token && userData) {
           setUser(userData);
           setIsLoggedIn(true);
@@ -73,7 +77,7 @@ export default function Layout({ children }) {
     }
     setLoading(false);
   }, [navigate, setUser, setIsLoggedIn]);
-  
+
   const handleLogout = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("isLoggedIn");
@@ -84,26 +88,31 @@ export default function Layout({ children }) {
   };
 
   const menuItems = [
-    { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-    { text: "Applicants", icon: <PeopleIcon />, path: "/applicants" },
-    // { text: "Meetings", icon: <EventIcon />, path: "/meetings" },
-    { text: "Settings", icon: <SettingsIcon />, path: "/settings" }
+    // { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+    { text: "Jobs Applied", icon: <WorkIcon />, path: "/dashboard" },
+    { text: "Profile", icon: <PersonIcon />, path: "/profile" },
   ];
 
   const userMenuItems = [
     { text: "Dashboard", path: "/dashboard" },
     { text: "Applicants", path: "/applicants" },
     { text: "Meetings", path: "/meetings" },
-    { text: "Settings", path: "/settings" }
+    { text: "Settings", path: "/settings" },
   ];
 
   const drawer = (
     <div>
       <Toolbar>
         <img
+          onClick={() => navigate("/")}
           src={logo}
           alt="Logo"
-          style={{ maxWidth: "150px", margin: "0 auto", display: "block" }}
+          style={{
+            maxWidth: "150px",
+            margin: "0 auto",
+            display: "block",
+            cursor: "pointer",
+          }}
         />
       </Toolbar>
       <Divider />
@@ -139,7 +148,7 @@ export default function Layout({ children }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh"
+          height: "100vh",
         }}
       >
         <CircularProgress />
@@ -155,7 +164,7 @@ export default function Layout({ children }) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           bgcolor: "white",
-          color: "black"
+          color: "black",
         }}
       >
         <Toolbar>
@@ -174,48 +183,50 @@ export default function Layout({ children }) {
             sx={{ display: "flex", alignItems: "center", ml: "auto", gap: 2 }}
           >
             {user ? (
-              <Box
-                sx={{
+              <div
+                style={{
                   display: "flex",
+                  flexDirection: "row",
                   alignItems: "center",
-                  cursor: "pointer"
+                  gap: "20px",
+                  padding: "10px",
+                  cursor: "pointer",
                 }}
-                onMouseEnter={(e) => setAnchorEl(e.currentTarget)}
-                onMouseLeave={() => setAnchorEl(null)}
               >
-                <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-                  <AccountCircleIcon sx={{ fontSize: 32, color: "#1976d2" }} />
-                </IconButton>
-                <Typography
-                  variant="h6"
-                  sx={{ ml: 1, fontWeight: "bold", color: "#1976d2" }}
+                <p
+                  style={{
+                    padding: "8px",
+                    cursor: "pointer",
+                    transition: "0.3s",
+                  }}
+                  onClick={() => navigate("/landing")}
                 >
-                  {user.fname} {user.lname}
-                </Typography>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={() => setAnchorEl(null)}
-                  PaperProps={{ sx: { maxWidth: 180, mt: 1.5 } }}
+                  Home
+                </p>
+                <p
+                  style={{
+                    padding: "8px",
+                    cursor: "pointer",
+                    transition: "0.3s",
+                  }}
+                  onClick={() => navigate("/search")}
                 >
-                  {userMenuItems.map((item) => (
-                    <MenuItem
-                      key={item.text}
-                      onClick={() => navigate(item.path)}
-                    >
-                      {item.text}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
+                  Find Jobs
+                </p>
+                <p
+                  style={{
+                    padding: "8px",
+                    cursor: "pointer",
+                    transition: "0.3s",
+                    "&:hover": { color: "#38bff0" },
+                  }}
+                  onClick={() => navigate("/dashboard")}
+                >
+                  Dashboard
+                </p>
+                <UserLoggedinChip user={user} handleLogout={handleLogout} />
+              </div>
             ) : null}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate("/post-job")}
-            >
-              Post Job
-            </Button>
           </Box>
         </Toolbar>
       </AppBar>
@@ -232,8 +243,8 @@ export default function Layout({ children }) {
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: drawerWidth
-            }
+              width: drawerWidth,
+            },
           }}
         >
           {drawer}
@@ -244,8 +255,8 @@ export default function Layout({ children }) {
             display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: drawerWidth
-            }
+              width: drawerWidth,
+            },
           }}
           open
         >
@@ -261,7 +272,7 @@ export default function Layout({ children }) {
           ml: { sm: `${drawerWidth}px` }, // Prevents overlapping with sidebar
           pt: "80px", // Adds padding instead of margin
           maxWidth: "1200px", // Restricts max width for all pages
-          margin: "auto" // Centers the content
+          margin: "auto", // Centers the content
         }}
       >
         {children}

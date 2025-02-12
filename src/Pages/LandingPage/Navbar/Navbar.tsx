@@ -5,6 +5,7 @@ import { User } from "lucide-react";
 import "./Navbar.css";
 import { UserContext } from "../../../App";
 import { Avatar, Chip, Tooltip } from "@mui/material";
+import UserLoggedinChip from "../../../components/UserLoggedinChip";
 
 const Navbar = () => {
   const { user, isLoggedIn, setIsLoggedIn, setUser } = useContext(UserContext);
@@ -37,6 +38,52 @@ const Navbar = () => {
       </div>
       <div className="nav-buttons">
         {isLoggedIn ? (
+          user.roleName === "JOBSEEKER" ? (
+            <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "20px",
+              padding: "10px",
+              cursor: "pointer",
+            }}
+          >
+            <p
+              style={{
+                padding: "8px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => navigate("/landing")}
+            >
+              Home
+            </p>
+            <p
+              style={{
+                padding: "8px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => navigate("/search")}
+            >
+              Find Jobs
+            </p>
+            <p
+              style={{
+                padding: "8px",
+                cursor: "pointer",
+                transition: "0.3s",
+                "&:hover": { color: "#38bff0" },
+              }}
+              onClick={() => navigate("/dashboard")}
+            >
+              Dashboard
+            </p>
+            <UserLoggedinChip user={user} handleLogout={handleLogout} />
+          </div>
+
+          ):
           <>
             <Tooltip title="logout" placement="bottom-end">
               <Chip
